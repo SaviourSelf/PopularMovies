@@ -4,52 +4,47 @@ import android.widget.BaseAdapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 /**
  * Created by Justin Lewis on 3/29/2016.
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private String [] posterUrls;
+    private List<String> posterUrls;
     public String LOG_TAG = ImageAdapter.class.getSimpleName();
-    private GridView gv;
 
-    public ImageAdapter(Context c, String [] posterUrls, GridView gridView) {
+    public ImageAdapter(Context c, List<String> myList) {
+        super();
         mContext = c;
-        if (posterUrls != null)
-            this.posterUrls = posterUrls;
-        else
-            this.posterUrls = new String [] {"http://image.tmdb.org/t/p/w185/kqjL17yufvn9OVLyXYpvtyrFfak.jpg"};
-        this.gv = gridView;
-    }
-
-    public void setPosters(String [] posters)
-    {
-        this.posterUrls = posters;
+        this.posterUrls = myList;
+        posterUrls.add("http://image.tmdb.org/t/p/w185/dlIPGXPxXQTp9kFrRzn0RsfUelx.jpg");
     }
 
     @Override
     public int getCount() {
-        return posterUrls.length;
+        System.out.println("Returning: " + posterUrls.size());
+        return posterUrls.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return posterUrls[position];
+        return posterUrls.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return 6;
     }
 
     // create a new ImageView for each item referenced by the Adapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        System.out.println("Calling getView");
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);
@@ -59,7 +54,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        Picasso.with(this.mContext).load(posterUrls[position])
+        Picasso.with(this.mContext).load(posterUrls.get(position))
                 .into(imageView);
 
         return imageView;

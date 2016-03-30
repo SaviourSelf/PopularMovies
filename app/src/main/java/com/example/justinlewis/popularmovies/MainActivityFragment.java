@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -33,25 +35,27 @@ public class MainActivityFragment extends Fragment {
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     private ArrayAdapter<String> mPosterAdapter;
-    private String [] posterUrls;
+    private List<String> posterUrls;
     private ImageAdapter images;
+    private GridView gridview;
 
     public MainActivityFragment() {
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        posterUrls = new ArrayList<String>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        FetchMovieDataTask f = new FetchMovieDataTask();
-        f.execute("");
+        getMoviePosters();
 
-        GridView gridview = (GridView) rootView.findViewById(R.id.picture_gridview);
-        images = new ImageAdapter(this.getActivity(), posterUrls, gridview);
+        gridview = (GridView) rootView.findViewById(R.id.picture_gridview);
+        images = new ImageAdapter(this.getActivity(), posterUrls);
         gridview.setAdapter(images);
+        gridview.setVisibility(GridView.VISIBLE);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -134,11 +138,12 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(String[] strings) {
             super.onPostExecute(strings);
-            posterUrls = strings;
-
-            Log.v(LOG_TAG, "Strings length: " + strings.length);
-            images.setPosters(strings);
+            posterUrls.clear();
+            for (String s : strings)
+                posterUrls.add(s);
+            Log.v(LOG_TAG, "Strings length: " + posterUrls.size());
             images.notifyDataSetChanged();
+            Log.v(LOG_TAG, "Notify sent! -- results: " + images.getCount());
         }
 
         private String readPopularMovieData() {
