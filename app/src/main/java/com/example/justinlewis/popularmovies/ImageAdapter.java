@@ -22,12 +22,10 @@ public class ImageAdapter extends BaseAdapter {
         super();
         mContext = c;
         this.posterUrls = myList;
-        //posterUrls.add("http://image.tmdb.org/t/p/w185/dlIPGXPxXQTp9kFrRzn0RsfUelx.jpg");
     }
 
     @Override
     public int getCount() {
-        System.out.println("Returning: " + posterUrls.size());
         return posterUrls.size();
     }
 
@@ -38,13 +36,11 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 6;
+        return posterUrls.get(position).hashCode();
     }
 
-    // create a new ImageView for each item referenced by the Adapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        System.out.println("Calling getView");
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);

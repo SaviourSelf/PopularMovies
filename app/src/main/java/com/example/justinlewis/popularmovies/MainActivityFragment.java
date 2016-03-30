@@ -34,7 +34,6 @@ import java.util.List;
 public class MainActivityFragment extends Fragment {
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
-    private ArrayAdapter<String> mPosterAdapter;
     private List<String> posterUrls;
     private ImageAdapter images;
     private GridView gridview;
@@ -50,7 +49,7 @@ public class MainActivityFragment extends Fragment {
         posterUrls = new ArrayList<String>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        getMoviePosters();
+        getMoviePosters("");
 
         gridview = (GridView) rootView.findViewById(R.id.picture_gridview);
         images = new ImageAdapter(this.getActivity(), posterUrls);
@@ -67,10 +66,10 @@ public class MainActivityFragment extends Fragment {
         return gridview;
     }
 
-    public void getMoviePosters()
+    public void getMoviePosters(String params)
     {
         FetchMovieDataTask t = new FetchMovieDataTask();
-        t.execute("");
+        t.execute(params);
     }
 
     public class FetchMovieDataTask extends AsyncTask<String, Void, String[]> {
@@ -82,10 +81,12 @@ public class MainActivityFragment extends Fragment {
         {
             if (params.length == 0)
                 return null;
-            String json = readPopularMovieData();
 
-            //Contains URL to posters
+            String movieUrl = getPopularMovieURL();
+            String json = readPopularMovieData(movieUrl);
+
             String [] posters = null;
+
             try {
                 posters = getMoviePosters(json);
             } catch (JSONException e)
@@ -103,7 +104,6 @@ public class MainActivityFragment extends Fragment {
                     .appendPath("p")
                     .appendPath("w185")
                     .appendPath(imagePath.substring(1));
-            //Log.v(LOG_TAG, builder.build().toString());
             return builder.build().toString();
         }
 
@@ -116,7 +116,6 @@ public class MainActivityFragment extends Fragment {
                     .appendPath("movie")
                     .appendPath("popular")
                     .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
-            //Log.v(LOG_TAG, builder.build().toString());
             return builder.build().toString();
         }
 
@@ -129,7 +128,6 @@ public class MainActivityFragment extends Fragment {
             {
                 JSONObject o = array.getJSONObject(i);
                 retVal[i] = buildImageURL(o.getString("poster_path"));
-                //Log.v(LOG_TAG, retVal[i]);
             }
             return retVal;
         }
@@ -141,19 +139,17 @@ public class MainActivityFragment extends Fragment {
             posterUrls.clear();
             for (String s : strings)
                 posterUrls.add(s);
-            Log.v(LOG_TAG, "Strings length: " + posterUrls.size());
             images.notifyDataSetChanged();
-            Log.v(LOG_TAG, "Notify sent! -- results: " + images.getCount());
         }
 
-        private String readPopularMovieData() {
+        private String readPopularMovieData(String movieUrl) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
             String popularMovieJSON = null;
 
             try {
-                URL url = new URL(getPopularMovieURL());
+                URL url = new URL(movieUrl);
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
