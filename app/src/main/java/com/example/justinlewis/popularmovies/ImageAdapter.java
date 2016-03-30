@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
@@ -56,9 +57,8 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(gv.getLayoutParams());
-            imageView.setLayoutParams(new GridView.LayoutParams(185*3, 278*3));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP); //GOOD
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setAdjustViewBounds(true);
         } else {
             imageView = (ImageView) convertView;
         }
