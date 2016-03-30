@@ -1,15 +1,11 @@
 package com.example.justinlewis.popularmovies;
 
-import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.BaseAdapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 

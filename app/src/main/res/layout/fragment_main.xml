@@ -6,13 +6,6 @@
     android:numColumns="auto_fit"
     android:verticalSpacing="0dp"
     android:horizontalSpacing="0dp"
-    android:gravity="fill_horizontal" >
+    android:gravity="center" >
 
 </GridView>
-
-<!--
-android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:columnWidth="90dp"
-    android:adjustViewBounds="true"
-    -->
