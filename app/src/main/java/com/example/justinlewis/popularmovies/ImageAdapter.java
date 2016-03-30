@@ -22,7 +22,7 @@ public class ImageAdapter extends BaseAdapter {
         super();
         mContext = c;
         this.posterUrls = myList;
-        posterUrls.add("http://image.tmdb.org/t/p/w185/dlIPGXPxXQTp9kFrRzn0RsfUelx.jpg");
+        //posterUrls.add("http://image.tmdb.org/t/p/w185/dlIPGXPxXQTp9kFrRzn0RsfUelx.jpg");
     }
 
     @Override
