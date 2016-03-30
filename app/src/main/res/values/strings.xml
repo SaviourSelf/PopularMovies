@@ -2,4 +2,6 @@
     <string name="app_name">PopularMovies</string>
     <string name="app_main_bar">Pop Movies</string>
     <string name="action_settings">Settings</string>
+    <string name="menu_popular_movies">Popular</string>
+    <string name="menu_highest_rated_movies">Top Rated</string>
 </resources>

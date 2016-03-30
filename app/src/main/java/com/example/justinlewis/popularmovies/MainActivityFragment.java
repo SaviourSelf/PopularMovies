@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -48,6 +51,7 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         posterUrls = new ArrayList<String>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        this.setHasOptionsMenu(true);
 
         getMoviePosters("");
 
@@ -71,6 +75,29 @@ public class MainActivityFragment extends Fragment {
         FetchMovieDataTask t = new FetchMovieDataTask();
         t.execute(params);
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        if (id == R.id.action_popular_movies)
+        {
+            getMoviePosters("");
+            return true;
+        } else if (id == R.id.action_highest_rated_movies)
+        {
+            getMoviePosters("");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //Start subclass
 
     public class FetchMovieDataTask extends AsyncTask<String, Void, String[]> {
 
