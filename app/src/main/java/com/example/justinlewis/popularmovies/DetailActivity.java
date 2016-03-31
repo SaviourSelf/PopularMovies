@@ -23,9 +23,12 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
 
         this.model = (MovieData) getIntent().getSerializableExtra("Editing");
+        Bundle b = new Bundle();
+        b.putSerializable("MODEL", model);
 
         if (savedInstanceState == null) {
             DetailActivityFragment frag = new DetailActivityFragment();
+            frag.setArguments(b);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, frag)
                     .commit();
@@ -34,6 +37,8 @@ public class DetailActivity extends ActionBarActivity {
 
     public static class DetailActivityFragment extends Fragment {
 
+        MovieData model;
+
         public DetailActivityFragment() {
 
         }
@@ -41,6 +46,8 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            model = (MovieData) getArguments().getSerializable("MODEL");
+            System.out.println(model.getPlot_synopsis());
             return inflater.inflate(R.layout.fragment_detail, container, false);
         }
     }
