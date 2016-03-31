@@ -41,6 +41,9 @@ public class MainActivityFragment extends Fragment {
     private ImageAdapter images;
     private GridView gridview;
 
+    public final String POPULAR_URL = "popular";
+    public final String TOP_RATED_URL = "top_rated";
+
     public MainActivityFragment() {
 
     }
@@ -97,12 +100,12 @@ public class MainActivityFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_popular_movies)
         {
-            getMoviePosters("popular");
+            getMoviePosters(POPULAR_URL);
             return true;
         }
         if (id == R.id.action_highest_rated_movies)
         {
-            getMoviePosters("top_rated");
+            getMoviePosters(TOP_RATED_URL);
             return true;
         }
         return super.onOptionsItemSelected(item);
