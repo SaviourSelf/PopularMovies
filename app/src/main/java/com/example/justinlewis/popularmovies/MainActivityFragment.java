@@ -165,8 +165,6 @@ public class MainActivityFragment extends Fragment {
             MovieData [] retVal = new MovieData [array.length()];
             for (int i = 0; i < array.length(); i++)
             {
-                //Movie details layout contains title, release date, movie poster, vote average, and plot synopsis.
-
                 JSONObject o = array.getJSONObject(i);
                 retVal[i] = new MovieData(
                         o.getString("title"),                      // Title

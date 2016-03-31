@@ -5,7 +5,6 @@ package com.example.justinlewis.popularmovies;
  */
 public class MovieData {
 
-    //Movie details layout contains title, release date, movie poster, vote average, and plot synopsis.
     private String title, release_date, poster_url, vote_average, plot_synopsis;
 
     public MovieData(String title, String release_date, String poster_url, String vote_average, String plot_synopsis)
