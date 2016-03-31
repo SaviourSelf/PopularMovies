@@ -15,28 +15,28 @@ import java.util.List;
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private List<String> posterUrls;
+    private List<MovieData> movieList;
     public String LOG_TAG = ImageAdapter.class.getSimpleName();
 
-    public ImageAdapter(Context c, List<String> myList) {
+    public ImageAdapter(Context c, List<MovieData> myList) {
         super();
         mContext = c;
-        this.posterUrls = myList;
+        this.movieList = myList;
     }
 
     @Override
     public int getCount() {
-        return posterUrls.size();
+        return movieList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return posterUrls.get(position);
+        return movieList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return posterUrls.get(position).hashCode();
+        return movieList.get(position).hashCode();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        Picasso.with(this.mContext).load(posterUrls.get(position))
+        Picasso.with(this.mContext).load(movieList.get(position).getPoster_url())
                 .into(imageView);
 
         return imageView;

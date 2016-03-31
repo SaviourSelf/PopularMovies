@@ -1,6 +1,6 @@
 package com.example.justinlewis.popularmovies;
 
-import android.media.Image;
+import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,7 +35,7 @@ import java.util.List;
 public class MainActivityFragment extends Fragment {
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
-    private List<String> posterUrls;
+    private List<MovieData> movieList;
     private ImageAdapter images;
     private GridView gridview;
 
@@ -54,11 +52,11 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
 
-        posterUrls = new ArrayList<String>();
+        movieList = new ArrayList<MovieData>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         gridview = (GridView) rootView.findViewById(R.id.picture_gridview);
-        images = new ImageAdapter(this.getActivity(), posterUrls);
+        images = new ImageAdapter(this.getActivity(), movieList);
         gridview.setAdapter(images);
         gridview.setVisibility(GridView.VISIBLE);
 
@@ -112,28 +110,29 @@ public class MainActivityFragment extends Fragment {
 
     //Start subclass
 
-    public class FetchMovieDataTask extends AsyncTask<String, Void, String[]> {
+    public class FetchMovieDataTask extends AsyncTask<String, Void, MovieData[]> {
 
         private final String LOG_TAG = FetchMovieDataTask.class.getSimpleName();
 
         @Override
-        protected String [] doInBackground(String...params)
+        protected MovieData [] doInBackground(String...params)
         {
             if (params.length == 0)
                 return null;
 
             String movieUrl = getPopularMovieURL(params[0]);
+            System.out.println(movieUrl);
             String json = readPopularMovieData(movieUrl);
 
-            String [] posters = null;
+            MovieData [] movieData = null;
 
             try {
-                posters = getMoviePosters(json);
+                movieData = getMoviePosters(json);
             } catch (JSONException e)
             {
                 Log.e(LOG_TAG, "Error getting JSON");
             }
-            return posters;
+            return movieData;
         }
         private String buildImageURL(String imagePath)
         {
@@ -159,27 +158,34 @@ public class MainActivityFragment extends Fragment {
             return builder.build().toString();
         }
 
-        private String [] getMoviePosters(String jsonString) throws JSONException
+        private MovieData [] getMoviePosters(String jsonString) throws JSONException
         {
             JSONObject fullJson = new JSONObject(jsonString);
             JSONArray array = fullJson.getJSONArray("results");
-            String [] retVal = new String [array.length()];
+            MovieData [] retVal = new MovieData [array.length()];
             for (int i = 0; i < array.length(); i++)
             {
+                //Movie details layout contains title, release date, movie poster, vote average, and plot synopsis.
+
                 JSONObject o = array.getJSONObject(i);
-                retVal[i] = buildImageURL(o.getString("poster_path"));
+                retVal[i] = new MovieData(
+                        o.getString("title"),                      // Title
+                        o.getString("release_date"),               // Release Date
+                        buildImageURL(o.getString("poster_path")), // Poster Url
+                        o.getString("vote_average"),               // Vote average
+                        o.getString("overview"));             // Plot
             }
             return retVal;
         }
 
 
         @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
+        protected void onPostExecute(MovieData[] capturedList) {
+            super.onPostExecute(capturedList);
 
-            posterUrls.clear();
-            for (String s : strings)
-                posterUrls.add(s);
+            movieList.clear();
+            for (MovieData s : capturedList)
+                movieList.add(s);
             images.notifyDataSetChanged();
         }
 
