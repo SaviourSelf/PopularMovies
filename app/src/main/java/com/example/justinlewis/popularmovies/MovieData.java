@@ -1,9 +1,11 @@
 package com.example.justinlewis.popularmovies;
 
+import java.io.Serializable;
+
 /**
  * Created by Justin Lewis on 3/30/2016.
  */
-public class MovieData {
+public class MovieData implements Serializable {
 
     private String title, release_date, poster_url, vote_average, plot_synopsis;
 

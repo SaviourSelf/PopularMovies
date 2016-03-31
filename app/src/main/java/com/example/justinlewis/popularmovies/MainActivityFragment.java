@@ -1,5 +1,6 @@
 package com.example.justinlewis.popularmovies;
 
+import android.content.Intent;
 import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -63,8 +64,10 @@ public class MainActivityFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(getActivity(), "" + position,
-                        Toast.LENGTH_SHORT).show();
+                MovieData data = (MovieData) images.getItem(position);
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra("Editing", data);
+                startActivity(intent);
             }
         });
         return gridview;
