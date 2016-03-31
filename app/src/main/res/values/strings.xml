@@ -5,4 +5,5 @@
     <string name="menu_popular_movies">Popular</string>
     <string name="menu_highest_rated_movies">Top Rated</string>
     <string name="title_activity_detail">Movie Details</string>
+    <string name="main_activity_title">Popular Movies</string>
 </resources>

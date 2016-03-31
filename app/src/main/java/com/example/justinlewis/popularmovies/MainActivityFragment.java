@@ -124,7 +124,6 @@ public class MainActivityFragment extends Fragment {
                 return null;
 
             String movieUrl = getPopularMovieURL(params[0]);
-            System.out.println(movieUrl);
             String json = readPopularMovieData(movieUrl);
 
             MovieData [] movieData = null;

@@ -14,15 +14,12 @@ import android.widget.Toast;
 
 public class DetailActivity extends ActionBarActivity {
 
-
-    public MovieData model;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        this.model = (MovieData) getIntent().getSerializableExtra("Editing");
+        MovieData model = (MovieData) getIntent().getSerializableExtra("Editing");
         Bundle b = new Bundle();
         b.putSerializable("MODEL", model);
 
