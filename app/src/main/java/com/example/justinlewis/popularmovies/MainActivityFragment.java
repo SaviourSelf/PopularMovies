@@ -96,7 +96,6 @@ public class MainActivityFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.v(LOG_TAG, "-------------------------onOptionsItemSelected");
         int id = item.getItemId();
         if (id == R.id.action_popular_movies)
         {
@@ -178,7 +177,6 @@ public class MainActivityFragment extends Fragment {
         protected void onPostExecute(String[] strings) {
             super.onPostExecute(strings);
 
-            Log.v(LOG_TAG, "===================================onPostExecute");
             posterUrls.clear();
             for (String s : strings)
                 posterUrls.add(s);
