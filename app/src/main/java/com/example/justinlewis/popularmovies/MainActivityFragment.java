@@ -49,11 +49,10 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        posterUrls = new ArrayList<String>();
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         this.setHasOptionsMenu(true);
 
-        getMoviePosters("");
+        posterUrls = new ArrayList<String>();
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         gridview = (GridView) rootView.findViewById(R.id.picture_gridview);
         images = new ImageAdapter(this.getActivity(), posterUrls);
@@ -70,6 +69,14 @@ public class MainActivityFragment extends Fragment {
         return gridview;
     }
 
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        getMoviePosters("popular");
+    }
+
+
     public void getMoviePosters(String params)
     {
         FetchMovieDataTask t = new FetchMovieDataTask();
@@ -78,20 +85,24 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
+
+        inflater.inflate(R.menu.menu_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        Log.v(LOG_TAG, "-------------------------onOptionsItemSelected");
         int id = item.getItemId();
         if (id == R.id.action_popular_movies)
         {
-            getMoviePosters("");
+            getMoviePosters("popular");
             return true;
-        } else if (id == R.id.action_highest_rated_movies)
+        }
+        if (id == R.id.action_highest_rated_movies)
         {
-            getMoviePosters("");
+            getMoviePosters("top_rated");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -109,7 +120,7 @@ public class MainActivityFragment extends Fragment {
             if (params.length == 0)
                 return null;
 
-            String movieUrl = getPopularMovieURL();
+            String movieUrl = getPopularMovieURL(params[0]);
             String json = readPopularMovieData(movieUrl);
 
             String [] posters = null;
@@ -134,14 +145,14 @@ public class MainActivityFragment extends Fragment {
             return builder.build().toString();
         }
 
-        private String getPopularMovieURL()
+        private String getPopularMovieURL(String popOrRated)
         {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme("http")
                     .authority("api.themoviedb.org")
                     .appendPath("3")
                     .appendPath("movie")
-                    .appendPath("popular")
+                    .appendPath(popOrRated)
                     .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
             return builder.build().toString();
         }
@@ -163,6 +174,8 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(String[] strings) {
             super.onPostExecute(strings);
+
+            Log.v(LOG_TAG, "===================================onPostExecute");
             posterUrls.clear();
             for (String s : strings)
                 posterUrls.add(s);

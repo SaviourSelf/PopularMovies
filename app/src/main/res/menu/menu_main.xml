@@ -2,14 +2,5 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.justinlewis.popularmovies.MainActivity">
-    <item
-        android:id="@+id/action_popular_movies"
-        android:orderInCategory="100"
-        android:title="@string/menu_popular_movies"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_highest_rated_movies"
-        android:orderInCategory="100"
-        android:title="@string/menu_highest_rated_movies"
-        app:showAsAction="never" />
+
 </menu>
