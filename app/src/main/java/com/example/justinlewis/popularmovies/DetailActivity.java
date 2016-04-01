@@ -51,11 +51,13 @@ public class DetailActivity extends ActionBarActivity {
             //System.out.println(model.getPlot_synopsis());
             View view = inflater.inflate(R.layout.fragment_detail, container, false);
             TextView movieTitle = (TextView) view.findViewById(R.id.movie_title);
+            TextView moviePlot = (TextView) view.findViewById(R.id.plotSynopsisText);
+
             ImageView imageView = (ImageView) view.findViewById(R.id.moviePoster);
 
             //imageView.setScaleType(ImageView.ScaleType.FIT_START);
             imageView.setAdjustViewBounds(true);
-
+            moviePlot.setText(model.getPlot_synopsis());
             movieTitle.setText(model.getTitle());
             Picasso.with(view.getContext()).load(model.getPoster_url())
                     .into(imageView);
