@@ -10,7 +10,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -44,8 +48,18 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             model = (MovieData) getArguments().getSerializable("MODEL");
-            System.out.println(model.getPlot_synopsis());
-            return inflater.inflate(R.layout.fragment_detail, container, false);
+            //System.out.println(model.getPlot_synopsis());
+            View view = inflater.inflate(R.layout.fragment_detail, container, false);
+            TextView movieTitle = (TextView) view.findViewById(R.id.movie_title);
+            ImageView poster = (ImageView) view.findViewById(R.id.moviePoster);
+
+            movieTitle.setText(model.getTitle());
+            Picasso.with(view.getContext()).load(model.getPoster_url())
+                    .into(poster);
+            movieTitle.postInvalidate();
+            System.out.println("DONE!");
+            return view;
+            //return inflater.inflate(R.layout.fragment_detail, container, false);
         }
     }
 
