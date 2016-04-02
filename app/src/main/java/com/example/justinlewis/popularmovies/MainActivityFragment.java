@@ -99,13 +99,6 @@ public class MainActivityFragment extends Fragment {
     public void onStart()
     {
         super.onStart();
-        String s = LoadPreferences();
-        if (s.equals(TOP_RATED_URL))
-            getActivity().setTitle("Top Rated");
-        if (s.equals(POPULAR_URL))
-            getActivity().setTitle("Popular Movies");
-        System.out.println(s);
-        getMoviePosters(s);
     }
 
     @Override
