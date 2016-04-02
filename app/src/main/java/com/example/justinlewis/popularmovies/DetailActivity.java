@@ -55,7 +55,6 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             model = (MovieData) getArguments().getSerializable("MODEL");
-            //System.out.println(model.getPlot_synopsis());
             View view = inflater.inflate(R.layout.fragment_detail, container, false);
             TextView movieTitle = (TextView) view.findViewById(R.id.movie_title);
             TextView moviePlot = (TextView) view.findViewById(R.id.plotSynopsisText);
@@ -70,7 +69,6 @@ public class DetailActivity extends ActionBarActivity {
             Picasso.with(view.getContext()).load(model.getPoster_url())
                     .into(imageView);
             return view;
-            //return inflater.inflate(R.layout.fragment_detail, container, false);
         }
     }
 
