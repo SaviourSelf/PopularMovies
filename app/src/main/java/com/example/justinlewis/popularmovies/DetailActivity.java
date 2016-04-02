@@ -36,6 +36,13 @@ public class DetailActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        System.out.println("Back Button Pressed");
+    }
+
     public static class DetailActivityFragment extends Fragment {
 
         MovieData model;

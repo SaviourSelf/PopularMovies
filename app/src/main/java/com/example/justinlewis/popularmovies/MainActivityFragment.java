@@ -1,9 +1,11 @@
 package com.example.justinlewis.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,8 +42,10 @@ public class MainActivityFragment extends Fragment {
     private ImageAdapter images;
     private GridView gridview;
 
+
     public final String POPULAR_URL = "popular";
     public final String TOP_RATED_URL = "top_rated";
+    private String lastChosen = POPULAR_URL;
 
     public MainActivityFragment() {
 
@@ -55,7 +59,7 @@ public class MainActivityFragment extends Fragment {
 
         movieList = new ArrayList<MovieData>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
+        getMoviePosters(LoadPreferences());
         gridview = (GridView) rootView.findViewById(R.id.picture_gridview);
         images = new ImageAdapter(this.getActivity(), movieList);
         gridview.setAdapter(images);
@@ -65,21 +69,56 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 MovieData data = (MovieData) images.getItem(position);
+                SavePreferences();
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
                         .putExtra("Editing", data);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
             }
         });
         return gridview;
     }
 
+    private void SavePreferences()
+    {
+        SharedPreferences preferences = getContext().getSharedPreferences("LASTCHOSEN", 0);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.putString("lastChosen", lastChosen); // value to store
+        editor.commit();
+    }
+
+    private String LoadPreferences()
+    {
+        SharedPreferences preferences = getContext().getSharedPreferences("LASTCHOSEN", 0);
+        lastChosen = preferences.getString("lastChosen", lastChosen);
+        return lastChosen;
+    }
+
     @Override
     public void onStart()
     {
         super.onStart();
-        getMoviePosters("popular");
+        String s = LoadPreferences();
+        if (s.equals(TOP_RATED_URL))
+            getActivity().setTitle("Top Rated");
+        if (s.equals(POPULAR_URL))
+            getActivity().setTitle("Popular Movies");
+        System.out.println(s);
+        getMoviePosters(s);
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        String s = LoadPreferences();
+        if (s.equals(TOP_RATED_URL))
+            getActivity().setTitle(getString(R.string.main_activity_title_top_rated));
+        if (s.equals(POPULAR_URL))
+            getActivity().setTitle(getString(R.string.main_activity_title_popular));
+        getMoviePosters(s);
+    }
 
     public void getMoviePosters(String params)
     {
@@ -101,11 +140,17 @@ public class MainActivityFragment extends Fragment {
         if (id == R.id.action_popular_movies)
         {
             getMoviePosters(POPULAR_URL);
+            lastChosen = POPULAR_URL;
+            SavePreferences();
+            getActivity().setTitle(getString(R.string.main_activity_title_popular));
             return true;
         }
         if (id == R.id.action_highest_rated_movies)
         {
             getMoviePosters(TOP_RATED_URL);
+            lastChosen = TOP_RATED_URL;
+            SavePreferences();
+            getActivity().setTitle(getString(R.string.main_activity_title_top_rated));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -157,7 +202,6 @@ public class MainActivityFragment extends Fragment {
                     .appendPath("movie")
                     .appendPath(popOrRated)
                     .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
-            System.out.println(builder.build().toString());
             return builder.build().toString();
         }
 
