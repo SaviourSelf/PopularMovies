@@ -12,7 +12,7 @@ public class MovieData implements Serializable {
     public MovieData(String title, String release_date, String poster_url, String vote_average, String plot_synopsis)
     {
         this.title = title;
-        this.release_date = release_date.substring(0,4); //Just the year
+        this.release_date = release_date; //Just the year
         this.poster_url = poster_url;
         this.vote_average = vote_average;
         this.plot_synopsis = plot_synopsis;

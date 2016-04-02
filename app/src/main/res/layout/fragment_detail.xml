@@ -61,11 +61,11 @@
             <!-- Year, runtime, release date -->
             <TextView
                 android:id="@+id/movieReleaseYear"
-                android:text="2000"
+                android:text="99-99-2000"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="40dp"
+                android:textSize="35dp"
                 android:textColor="@color/colorPrimary"
                 />
 
