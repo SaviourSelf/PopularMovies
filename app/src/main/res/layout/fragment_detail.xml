@@ -16,27 +16,35 @@
         android:textColor="@color/colorPrimary"
         android:background="@color/colorAccent"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="49dp"
+        android:paddingTop="39dp"
         android:paddingBottom="0dp"
     />
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left">
+        android:layout_gravity="left"
+        android:weightSum="2">
         <ImageView
             android:id="@+id/moviePoster"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+
             />
         <TextView
             android:id="@+id/plotSynopsisText"
             android:text="plot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
     </LinearLayout>
 

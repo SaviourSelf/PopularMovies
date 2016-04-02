@@ -55,8 +55,6 @@ public class DetailActivity extends ActionBarActivity {
 
             ImageView imageView = (ImageView) view.findViewById(R.id.moviePoster);
 
-            //imageView.setScaleType(ImageView.ScaleType.FIT_START);
-            imageView.setAdjustViewBounds(true);
             moviePlot.setText(model.getPlot_synopsis());
             movieTitle.setText(model.getTitle());
             Picasso.with(view.getContext()).load(model.getPoster_url())
