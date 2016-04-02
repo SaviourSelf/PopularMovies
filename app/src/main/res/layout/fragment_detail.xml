@@ -1,3 +1,12 @@
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -5,6 +14,7 @@
     android:layout_height="match_parent"
     android:paddingBottom="5dp"
     tools:context="com.example.justinlewis.popularmovies.DetailActivityFragment"
+    android:weightSum="3"
     >
 
     <TextView
@@ -18,6 +28,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingTop="39dp"
         android:paddingBottom="0dp"
+        android:layout_weight=".1"
     />
 
     <LinearLayout
@@ -40,13 +51,21 @@
 
             />
         <TextView
-            android:id="@+id/plotSynopsisText"
-            android:text="plot"
+            android:id="@+id/movieInfoText"
+            android:text="runtime"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/plotSynopsisText"
+        android:text="plot"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
 
 </LinearLayout>
+</ScrollView>
+    </LinearLayout>
