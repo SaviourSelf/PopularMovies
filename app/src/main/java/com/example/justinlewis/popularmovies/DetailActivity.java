@@ -52,9 +52,12 @@ public class DetailActivity extends ActionBarActivity {
             View view = inflater.inflate(R.layout.fragment_detail, container, false);
             TextView movieTitle = (TextView) view.findViewById(R.id.movie_title);
             TextView moviePlot = (TextView) view.findViewById(R.id.plotSynopsisText);
-
+            TextView releaseDate = (TextView) view.findViewById(R.id.movieReleaseYear);
+            TextView voteAverage = (TextView) view.findViewById(R.id.movieVoteAverate);
             ImageView imageView = (ImageView) view.findViewById(R.id.moviePoster);
 
+            voteAverage.setText("Vote average: " + model.getVote_average() + "/10");
+            releaseDate.setText(model.getRelease_date());
             moviePlot.setText(model.getPlot_synopsis());
             movieTitle.setText(model.getTitle());
             Picasso.with(view.getContext()).load(model.getPoster_url())

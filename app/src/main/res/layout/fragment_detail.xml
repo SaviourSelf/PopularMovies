@@ -6,6 +6,8 @@
 <ScrollView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
+    <!--  This top LinearLayout and ScrollView allow you to scroll
+           for very long Plot Synopsis                             -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -50,17 +52,44 @@
             android:paddingBottom="10dp"
 
             />
-        <TextView
-            android:id="@+id/movieInfoText"
-            android:text="runtime"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_gravity="left"
+            android:weightSum="2">
+            <!-- Year, runtime, release date -->
+            <TextView
+                android:id="@+id/movieReleaseYear"
+                android:text="2000"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="40dp"
+                android:textColor="@color/colorPrimary"
+                />
+
+            <TextView
+                android:id="@+id/movieVoteAverate"
+                android:text="0/10"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="15dp"
+                android:paddingTop="20dp"
+                android:textColor="@color/colorPrimary"
+                />
+
+            </LinearLayout>
 
     </LinearLayout>
     <TextView
         android:id="@+id/plotSynopsisText"
         android:text="plot"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingRight="5dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" />

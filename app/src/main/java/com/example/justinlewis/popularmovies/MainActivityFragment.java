@@ -157,6 +157,7 @@ public class MainActivityFragment extends Fragment {
                     .appendPath("movie")
                     .appendPath(popOrRated)
                     .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
+            System.out.println(builder.build().toString());
             return builder.build().toString();
         }
 
