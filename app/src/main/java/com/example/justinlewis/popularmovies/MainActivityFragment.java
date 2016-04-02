@@ -42,7 +42,6 @@ public class MainActivityFragment extends Fragment {
     private ImageAdapter images;
     private GridView gridview;
 
-
     public final String POPULAR_URL = "popular";
     public final String TOP_RATED_URL = "top_rated";
     private String lastChosen = POPULAR_URL;
@@ -56,6 +55,7 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
+        this.setRetainInstance(true);
 
         movieList = new ArrayList<MovieData>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
