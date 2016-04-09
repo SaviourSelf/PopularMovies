@@ -21,6 +21,24 @@ public class MovieData implements Parcelable {
         this.plot_synopsis = plot_synopsis;
     }
 
+    public MovieData(Parcel p)
+    {
+
+    }
+
+    public static final Parcelable.Creator<MovieData> CREATOR = new Parcelable.Creator<MovieData>(){
+
+        @Override
+        public MovieData createFromParcel(Parcel source){
+            return new MovieData(source);
+        }
+
+        @Override
+        public MovieData[] newArray(int size){
+            return new MovieData[size];
+        }
+    };
+
     @Override
     public int describeContents() {
         return 0;
