@@ -11,9 +11,11 @@ import java.io.Serializable;
 public class MovieData implements Parcelable {
 
     private String title, release_date, poster_url, vote_average, plot_synopsis;
+    private int id;
 
-    public MovieData(String title, String release_date, String poster_url, String vote_average, String plot_synopsis)
+    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis)
     {
+        this.id = Integer.parseInt(id);
         this.title = title;
         this.release_date = release_date; //Just the year
         this.poster_url = poster_url;
@@ -26,6 +28,7 @@ public class MovieData implements Parcelable {
      */
     public MovieData(Parcel p)
     {
+        id = Integer.parseInt(p.readString());
         title = p.readString();
         release_date = p.readString();
         poster_url = p.readString();
@@ -56,6 +59,7 @@ public class MovieData implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id + "");
         dest.writeString(title);
         dest.writeString(release_date);
         dest.writeString(poster_url);

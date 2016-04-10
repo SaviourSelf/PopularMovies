@@ -195,6 +195,8 @@ public class MainActivityFragment extends Fragment {
                     .appendPath("movie")
                     .appendPath(popOrRated)
                     .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
+
+            System.out.println(builder.build().toString());
             return builder.build().toString();
         }
 
@@ -207,11 +209,12 @@ public class MainActivityFragment extends Fragment {
             {
                 JSONObject o = array.getJSONObject(i);
                 retVal[i] = new MovieData(
+                        o.getString("id"),
                         o.getString("title"),                      // Title
                         o.getString("release_date"),               // Release Date
                         buildImageURL(o.getString("poster_path")), // Poster Url
                         o.getString("vote_average"),               // Vote average
-                        o.getString("overview"));             // Plot
+                        o.getString("overview"));                  // Plot
             }
             return retVal;
         }

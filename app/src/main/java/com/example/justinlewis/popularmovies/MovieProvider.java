@@ -2,8 +2,11 @@ package com.example.justinlewis.popularmovies;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -15,6 +18,15 @@ public class MovieProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
+    private static final String DBNAME = "MOVIEDB";
+    private static final String TABLE_NAME = "movieTable";
+
+    private static final String ID_FIELD = "_ID";
+    private static final String TITLE_FIELD = "title";
+    private static final String VOTER_AVERAGE_FIELD = "voteAverage";
+    private static final String POSTER_URL_FIELD = "posterUrl";
+    private static final String RELEASE_DATE_FIELD = "releaseDate";
+    private static final String PLOT_FIELD = "plot";
 
     static{
         sMovieQueryBuilder = new SQLiteQueryBuilder();
@@ -56,5 +68,44 @@ public class MovieProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
+    }
+
+    /**
+     * Helper class that actually creates and manages the provider's underlying data repository.
+     */
+    protected static final class MainDatabaseHelper extends SQLiteOpenHelper {
+
+        private static final String SQL_CREATE_MAIN = "CREATE TABLE " +
+                TABLE_NAME + " " +                // Table's name
+                "( " +                           // The columns in the table
+                ID_FIELD + " INTEGER PRIMARY KEY, " +
+                TITLE_FIELD + " TEXT NOT NULL, " +
+                RELEASE_DATE_FIELD + " TEXT NOT NULL, " +
+                POSTER_URL_FIELD + " TEXT NOT NULL, " +
+                PLOT_FIELD + " TEXT NOT NULL, " +
+                VOTER_AVERAGE_FIELD + " TEXT NOT NULL" +
+                ");";
+
+        /*
+         * Instantiates an open helper for the provider's SQLite data repository
+         * Do not do database creation and upgrade here.
+         */
+        MainDatabaseHelper(Context context) {
+            super(context, DBNAME, null, 1);
+        }
+
+        /*
+         * Creates the data repository. This is called when the provider attempts to open the
+         * repository and SQLite reports that it doesn't exist.
+         */
+        public void onCreate(SQLiteDatabase db) {
+            // Creates the main table
+            db.execSQL(SQL_CREATE_MAIN);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            return;
+        }
     }
 }
