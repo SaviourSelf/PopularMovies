@@ -6,4 +6,5 @@
     <string name="main_activity_title_top_rated">Top Rated</string>
     <string name="title_activity_detail">Movie Details</string>
     <string name="main_activity_title_popular">Popular Movies</string>
+    <string name="main_activity_title_favorite">Favorites</string>
 </resources>

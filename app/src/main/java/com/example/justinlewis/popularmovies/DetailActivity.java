@@ -47,7 +47,6 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            //model = (MovieData) getArguments().getSerializable("MODEL");
             model = (MovieData) getArguments().getParcelable("MODEL");
             View view = inflater.inflate(R.layout.fragment_detail, container, false);
             TextView movieTitle = (TextView) view.findViewById(R.id.movie_title);

@@ -21,6 +21,9 @@ public class MovieData implements Parcelable {
         this.plot_synopsis = plot_synopsis;
     }
 
+    /*
+     * Derived from writeToParcel method.
+     */
     public MovieData(Parcel p)
     {
         title = p.readString();
@@ -48,6 +51,9 @@ public class MovieData implements Parcelable {
         return 0;
     }
 
+    /*
+     * These strings are read in this order in the MovieData(Parcel p) constructor.
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
