@@ -1,6 +1,7 @@
 package com.example.justinlewis.popularmovies;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -10,14 +11,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import java.sql.SQLException;
 
 /**
  * Created by Justin Lewis on 4/10/2016.
  */
 public class MovieProvider extends ContentProvider {
 
+    private final String LOG_TAG = MovieProvider.class.getSimpleName();
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
+    private static final Uri CONTENT_URI = MovieContract.BASE_CONTENT_URI;
+    private MainDatabaseHelper mOpenHelper;
+    private SQLiteDatabase db;
+
     private static final String DBNAME = "MOVIEDB";
     private static final String TABLE_NAME = "movieTable";
 
@@ -39,7 +48,9 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        return false;
+        mOpenHelper = new MainDatabaseHelper(getContext());
+        db = mOpenHelper.getWritableDatabase();
+        return true;
     }
 
     @Nullable
@@ -57,6 +68,14 @@ public class MovieProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        long rowID = db.insert(	TABLE_NAME, "", values);
+        if (rowID > 0)
+        {
+            Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+            getContext().getContentResolver().notifyChange(_uri, null);
+            return _uri;
+        }
+        Log.v(LOG_TAG, "Failed to add a record into " + uri);
         return null;
     }
 
@@ -105,7 +124,8 @@ public class MovieProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            return;
+            db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
+            onCreate(db);
         }
     }
 }
