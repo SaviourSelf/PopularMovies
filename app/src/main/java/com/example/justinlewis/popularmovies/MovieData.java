@@ -23,7 +23,11 @@ public class MovieData implements Parcelable {
 
     public MovieData(Parcel p)
     {
-
+        title = p.readString();
+        release_date = p.readString();
+        poster_url = p.readString();
+        vote_average = p.readString();
+        plot_synopsis = p.readString();
     }
 
     public static final Parcelable.Creator<MovieData> CREATOR = new Parcelable.Creator<MovieData>(){
