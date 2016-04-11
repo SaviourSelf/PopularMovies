@@ -59,7 +59,8 @@ public class MovieProvider extends ContentProvider {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(TABLE_NAME);
 
-        qb.appendWhere( ID_FIELD + "=" + uri.getPathSegments().get(1));
+        if (uri.getPathSegments().size() > 20)
+            qb.appendWhere( ID_FIELD + "=" + uri.getPathSegments().get(1));
         /*
         switch (sUriMatcher.match(uri)) {
             case STUDENTS:
@@ -76,9 +77,6 @@ public class MovieProvider extends ContentProvider {
         */
 
         if (sortOrder == null || sortOrder == ""){
-            /**
-             * By default sort on student names
-             */
             sortOrder = TITLE_FIELD;
         }
         Cursor c = qb.query(db,	projection,	selection, selectionArgs,null, null, sortOrder);
