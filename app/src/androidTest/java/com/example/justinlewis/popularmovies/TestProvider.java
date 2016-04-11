@@ -72,6 +72,7 @@ public class TestProvider extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         deleteAllRecords();
+        deleteAllRecordsFromProvider();
     }
 
     /*

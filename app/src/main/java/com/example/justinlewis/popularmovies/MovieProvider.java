@@ -21,7 +21,7 @@ import java.sql.SQLException;
 public class MovieProvider extends ContentProvider {
 
     private final String LOG_TAG = MovieProvider.class.getSimpleName();
-    private static final UriMatcher sUriMatcher = buildUriMatcher();
+    static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
     public static final Uri CONTENT_URI = MovieContract.BASE_CONTENT_URI;
     private MainDatabaseHelper mOpenHelper;
@@ -56,7 +56,38 @@ public class MovieProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        qb.setTables(TABLE_NAME);
+
+        qb.appendWhere( ID_FIELD + "=" + uri.getPathSegments().get(1));
+        /*
+        switch (sUriMatcher.match(uri)) {
+            case STUDENTS:
+                qb.setProjectionMap(STUDENTS_PROJECTION_MAP);
+                break;
+
+            case ID_FIELD:
+                qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1));
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+        */
+
+        if (sortOrder == null || sortOrder == ""){
+            /**
+             * By default sort on student names
+             */
+            sortOrder = TITLE_FIELD;
+        }
+        Cursor c = qb.query(db,	projection,	selection, selectionArgs,null, null, sortOrder);
+
+        /**
+         * register to watch a content URI for changes
+         */
+        c.setNotificationUri(getContext().getContentResolver(), uri);
+        return c;
     }
 
     @Nullable
