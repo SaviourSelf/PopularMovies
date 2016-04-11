@@ -27,36 +27,21 @@ public class TestProvider extends AndroidTestCase {
        the delete functionality in the ContentProvider.
      */
     public void deleteAllRecordsFromProvider() {
-//        mContext.getContentResolver().delete(
-//                WeatherEntry.CONTENT_URI,
-//                null,
-//                null
-//        );
-//        mContext.getContentResolver().delete(
-//                LocationEntry.CONTENT_URI,
-//                null,
-//                null
-//        );
-//
-//        Cursor cursor = mContext.getContentResolver().query(
-//                WeatherEntry.CONTENT_URI,
-//                null,
-//                null,
-//                null,
-//                null
-//        );
-//        assertEquals("Error: Records not deleted from Weather table during delete", 0, cursor.getCount());
-//        cursor.close();
-//
-//        cursor = mContext.getContentResolver().query(
-//                LocationEntry.CONTENT_URI,
-//                null,
-//                null,
-//                null,
-//                null
-//        );
-//        assertEquals("Error: Records not deleted from Location table during delete", 0, cursor.getCount());
-//        cursor.close();
+        mContext.getContentResolver().delete(
+                MovieProvider.CONTENT_URI,
+                null,
+                null
+        );
+
+        Cursor cursor = mContext.getContentResolver().query(
+                MovieProvider.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        assertEquals("Error: Records not deleted from Weather table during delete", 0, cursor.getCount());
+        cursor.close();
     }
 
     /*
@@ -65,12 +50,12 @@ public class TestProvider extends AndroidTestCase {
        delete functionality is available in the ContentProvider.
      */
     public void deleteAllRecordsFromDB() {
-//        WeatherDbHelper dbHelper = new WeatherDbHelper(mContext);
-//        SQLiteDatabase db = dbHelper.getWritableDatabase();
-//
-//        db.delete(WeatherEntry.TABLE_NAME, null, null);
-//        db.delete(LocationEntry.TABLE_NAME, null, null);
-//        db.close();
+        MovieProvider.MainDatabaseHelper dbHelper = new MovieProvider.MainDatabaseHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete(MovieProvider.TABLE_NAME, null, null);
+
+        db.close();
     }
 
     /*

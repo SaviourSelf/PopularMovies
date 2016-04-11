@@ -23,12 +23,12 @@ public class MovieProvider extends ContentProvider {
     private final String LOG_TAG = MovieProvider.class.getSimpleName();
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
-    private static final Uri CONTENT_URI = MovieContract.BASE_CONTENT_URI;
+    public static final Uri CONTENT_URI = MovieContract.BASE_CONTENT_URI;
     private MainDatabaseHelper mOpenHelper;
     private SQLiteDatabase db;
 
     private static final String DBNAME = "MOVIEDB";
-    private static final String TABLE_NAME = "movieTable";
+    public static final String TABLE_NAME = "movieTable";
 
     private static final String ID_FIELD = "_ID";
     private static final String TITLE_FIELD = "title";
