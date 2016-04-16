@@ -64,6 +64,13 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
 
+        ContentValues values2 = new ContentValues();
+        values2.put(MovieProvider.FAVORITE_FIELD, true);
+
+        int ret = mContext.getContentResolver().update(MovieProvider.CONTENT_URI, values2, "1", null);
+
+        assertEquals("Error: Failure to set favorite", 1, ret);
+
         assertEquals("Error: Record insert failed.", 1, cursor.getCount());
 
         cursor.close();
