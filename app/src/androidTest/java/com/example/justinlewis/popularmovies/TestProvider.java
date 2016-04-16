@@ -6,6 +6,7 @@ package com.example.justinlewis.popularmovies;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.test.AndroidTestCase;
 
 /*
@@ -40,7 +41,31 @@ public class TestProvider extends AndroidTestCase {
                 null,
                 null
         );
+
+        ContentValues values = new ContentValues();
+        values.put(MovieProvider.ID_FIELD, "1");
+        values.put(MovieProvider.PLOT_FIELD, "some plot");
+        values.put(MovieProvider.POSTER_URL_FIELD, "Some url");
+        values.put(MovieProvider.RELEASE_DATE_FIELD, "some date");
+        values.put(MovieProvider.TITLE_FIELD, "john cena");
+        values.put(MovieProvider.VOTER_AVERAGE_FIELD, "11/10");
+
         assertEquals("Error: Records not deleted from Weather table during delete", 0, cursor.getCount());
+
+        Uri uri = mContext.getContentResolver().insert(MovieProvider.CONTENT_URI, values);
+
+        cursor.close();
+
+        cursor = mContext.getContentResolver().query(
+                MovieProvider.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        assertEquals("Error: Record insert failed.", 1, cursor.getCount());
+
         cursor.close();
     }
 

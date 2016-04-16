@@ -30,12 +30,14 @@ public class MovieProvider extends ContentProvider {
     private static final String DBNAME = "MOVIEDB";
     public static final String TABLE_NAME = "movieTable";
 
-    private static final String ID_FIELD = "_ID";
-    private static final String TITLE_FIELD = "title";
-    private static final String VOTER_AVERAGE_FIELD = "voteAverage";
-    private static final String POSTER_URL_FIELD = "posterUrl";
-    private static final String RELEASE_DATE_FIELD = "releaseDate";
-    private static final String PLOT_FIELD = "plot";
+    public static final String ID_FIELD = "_ID";
+    public static final String TITLE_FIELD = "title";
+    public static final String VOTER_AVERAGE_FIELD = "voteAverage";
+    public static final String POSTER_URL_FIELD = "posterUrl";
+    public static final String RELEASE_DATE_FIELD = "releaseDate";
+    public static final String PLOT_FIELD = "plot";
+
+    static final int MOVIES = 1;
 
     static{
         sMovieQueryBuilder = new SQLiteQueryBuilder();
@@ -43,7 +45,10 @@ public class MovieProvider extends ContentProvider {
 
     private static UriMatcher buildUriMatcher()
     {
-        return null;
+        UriMatcher m;
+        m = new UriMatcher(UriMatcher.NO_MATCH);
+        m.addURI(MovieContract.CONTENT_AUTHORITY, "movies", MOVIES);
+        return m;
     }
 
     @Override
@@ -59,9 +64,12 @@ public class MovieProvider extends ContentProvider {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(TABLE_NAME);
 
+        /*
+        int segments = uri.getPathSegments().size();
+        int match = sUriMatcher.match(uri);
+        String str = uri.getPathSegments().get(0);
         if (uri.getPathSegments().size() > 20)
             qb.appendWhere( ID_FIELD + "=" + uri.getPathSegments().get(1));
-        /*
         switch (sUriMatcher.match(uri)) {
             case STUDENTS:
                 qb.setProjectionMap(STUDENTS_PROJECTION_MAP);
@@ -97,7 +105,7 @@ public class MovieProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        long rowID = db.insert(	TABLE_NAME, "", values);
+        long rowID = db.insert(	TABLE_NAME, null, values);
         if (rowID > 0)
         {
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
