@@ -21,6 +21,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -181,7 +184,7 @@ public class MainActivityFragment extends Fragment {
             String movieUrl = getPopularMovieURL(params[0]);
             String json = readPopularMovieData(movieUrl);
 
-            if (json.isEmpty() || json == null)
+            if (json == null || json.isEmpty())
             {
                 //No Internet, get from DB.
                 return fetchFromDb();
@@ -273,6 +276,22 @@ public class MainActivityFragment extends Fragment {
         }
 
 
+        private String buildTrailersOrReviewsURL(String movieId, String videosOrReviews)
+        {
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme("http")
+                    .authority("api.themoviedb.org")
+                    .appendPath("3")
+                    .appendPath("movie")
+                    .appendPath(movieId)
+                    .appendPath(videosOrReviews)
+                    .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
+
+            System.out.println(builder.build().toString());
+            return builder.build().toString();
+        }
+
+
         private String getPopularMovieURL(String popOrRated)
         {
             Uri.Builder builder = new Uri.Builder();
@@ -304,7 +323,13 @@ public class MainActivityFragment extends Fragment {
                         o.getString("vote_average"),               // Vote average
                         o.getString("overview"),                   // Plot
                         lastChosen);                               // Source (Popular / Top)
-                Log.v(LOG_TAG, "ID: " + retVal[i].getId());
+                //Log.v(LOG_TAG, "ID: " + retVal[i].getId());
+
+                String a,b;
+                a= buildTrailersOrReviewsURL(retVal[i].getId() + "", "videos");
+                b= buildTrailersOrReviewsURL(retVal[i].getId() + "", "reviews");
+                System.out.println(a);
+                System.out.println(b);
 
                 //If it doesn't exist in the DB, create it in the DB.
                 Cursor cursor;
@@ -315,6 +340,9 @@ public class MainActivityFragment extends Fragment {
                         new String [] {retVal[i].getId() + ""},
                         null
                 );
+
+                ReviewObject [] r = getReviewsFromUrl(b);
+
                 if (cursor.getCount() > 0) {
                     values.put(MovieProvider.ID_FIELD, retVal[i].getId());
                     values.put(MovieProvider.PLOT_FIELD, retVal[i].getPlot_synopsis());
@@ -323,11 +351,33 @@ public class MainActivityFragment extends Fragment {
                     values.put(MovieProvider.TITLE_FIELD, retVal[i].getTitle());
                     values.put(MovieProvider.VOTER_AVERAGE_FIELD, retVal[i].getVote_average());
                     values.put(MovieProvider.SOURCE_FIELD, lastChosen);
+                    values.put(MovieProvider.REVIEW_FIELD, packReviews(r));
                     Uri uri = getContext().getContentResolver().insert(MovieProvider.CONTENT_URI, values);
                 }
                 cursor.close();
             }
             return retVal;
+        }
+
+        private ReviewObject [] getReviewsFromUrl(String url)
+        {
+            String data = readPopularMovieData(url);
+            return null;
+        }
+
+
+        private ReviewObject [] unpackReviews(byte [] blob)
+        {
+            String json = new String(blob);
+            Gson gson = new Gson();
+            return gson.fromJson(json, new TypeToken<ArrayList<ReviewObject>>(){}.getType());
+        }
+
+
+        private String packReviews(ReviewObject [] r)
+        {
+            Gson gson = new Gson();
+            return gson.toJson(r);
         }
 
 

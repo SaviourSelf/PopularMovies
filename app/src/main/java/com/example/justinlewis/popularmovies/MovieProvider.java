@@ -38,6 +38,7 @@ public class MovieProvider extends ContentProvider {
     public static final String PLOT_FIELD = "plot";
     public static final String FAVORITE_FIELD = "favorite";
     public static final String SOURCE_FIELD = "popular";
+    public static final String REVIEW_FIELD = "reviewObject";
 
     static final int MOVIES = 1;
 
@@ -126,7 +127,8 @@ public class MovieProvider extends ContentProvider {
                 PLOT_FIELD + " TEXT NOT NULL, " +
                 VOTER_AVERAGE_FIELD + " TEXT NOT NULL, " +
                 FAVORITE_FIELD + " TEXT NOT NULL, " +
-                SOURCE_FIELD + " TEXT NOT NULL" +
+                SOURCE_FIELD + " TEXT NOT NULL, " +
+                REVIEW_FIELD + " TEXT NOT NULL" +
                 ");";
 
         /*
