@@ -3,6 +3,7 @@ package com.example.justinlewis.popularmovies;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -203,6 +204,12 @@ public class MainActivityFragment extends Fragment {
 
         private MovieData [] getMoviePosters(String jsonString) throws JSONException
         {
+            //Drop everything.
+            getContext().getContentResolver().delete(
+                    MovieProvider.CONTENT_URI,
+                    null,
+                    null
+            );
             JSONObject fullJson = new JSONObject(jsonString);
             JSONArray array = fullJson.getJSONArray("results");
             MovieData [] retVal = new MovieData [array.length()];
@@ -217,14 +224,27 @@ public class MainActivityFragment extends Fragment {
                         buildImageURL(o.getString("poster_path")), // Poster Url
                         o.getString("vote_average"),               // Vote average
                         o.getString("overview"));                  // Plot
+                Log.v(LOG_TAG, "ID: " + retVal[i].getId());
 
-                values.put(MovieProvider.ID_FIELD, retVal[i].getId());
-                values.put(MovieProvider.PLOT_FIELD, retVal[i].getPlot_synopsis());
-                values.put(MovieProvider.POSTER_URL_FIELD, retVal[i].getPoster_url());
-                values.put(MovieProvider.RELEASE_DATE_FIELD, retVal[i].getRelease_date());
-                values.put(MovieProvider.TITLE_FIELD, retVal[i].getTitle());
-                values.put(MovieProvider.VOTER_AVERAGE_FIELD, retVal[i].getVote_average());
-                Uri uri = getContext().getContentResolver().insert(MovieProvider.CONTENT_URI, values);
+                //If it doesn't exist in the DB, create it in the DB.
+                Cursor cursor;
+                cursor = getContext().getContentResolver().query(
+                        MovieProvider.CONTENT_URI,
+                        null,
+                        MovieProvider.ID_FIELD + " =?",
+                        new String [] {retVal[i].getId() + ""},
+                        null
+                );
+                if (cursor.getCount() > 0) {
+                    values.put(MovieProvider.ID_FIELD, retVal[i].getId());
+                    values.put(MovieProvider.PLOT_FIELD, retVal[i].getPlot_synopsis());
+                    values.put(MovieProvider.POSTER_URL_FIELD, retVal[i].getPoster_url());
+                    values.put(MovieProvider.RELEASE_DATE_FIELD, retVal[i].getRelease_date());
+                    values.put(MovieProvider.TITLE_FIELD, retVal[i].getTitle());
+                    values.put(MovieProvider.VOTER_AVERAGE_FIELD, retVal[i].getVote_average());
+                    Uri uri = getContext().getContentResolver().insert(MovieProvider.CONTENT_URI, values);
+                }
+                cursor.close();
             }
             return retVal;
         }
