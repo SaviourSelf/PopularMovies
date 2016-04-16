@@ -204,12 +204,7 @@ public class MainActivityFragment extends Fragment {
 
         private MovieData [] getMoviePosters(String jsonString) throws JSONException
         {
-            //Drop everything.
-            getContext().getContentResolver().delete(
-                    MovieProvider.CONTENT_URI,
-                    null,
-                    null
-            );
+
             JSONObject fullJson = new JSONObject(jsonString);
             JSONArray array = fullJson.getJSONArray("results");
             MovieData [] retVal = new MovieData [array.length()];
