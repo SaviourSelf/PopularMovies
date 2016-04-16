@@ -37,6 +37,7 @@ public class MovieProvider extends ContentProvider {
     public static final String RELEASE_DATE_FIELD = "releaseDate";
     public static final String PLOT_FIELD = "plot";
     public static final String FAVORITE_FIELD = "favorite";
+    public static final String SOURCE_FIELD = "popular";
 
     static final int MOVIES = 1;
 
@@ -124,7 +125,8 @@ public class MovieProvider extends ContentProvider {
                 POSTER_URL_FIELD + " TEXT NOT NULL, " +
                 PLOT_FIELD + " TEXT NOT NULL, " +
                 VOTER_AVERAGE_FIELD + " TEXT NOT NULL, " +
-                FAVORITE_FIELD + " TEXT NOT NULL" +
+                FAVORITE_FIELD + " TEXT NOT NULL, " +
+                SOURCE_FIELD + " TEXT NOT NULL" +
                 ");";
 
         /*

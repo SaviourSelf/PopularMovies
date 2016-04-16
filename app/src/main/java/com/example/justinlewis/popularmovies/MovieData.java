@@ -10,10 +10,10 @@ import java.io.Serializable;
  */
 public class MovieData implements Parcelable {
 
-    private String title, release_date, poster_url, vote_average, plot_synopsis, favorite;
+    private String title, release_date, poster_url, vote_average, plot_synopsis, favorite, source;
     private int id;
 
-    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis)
+    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis, String source)
     {
         this.id = Integer.parseInt(id);
         this.title = title;
@@ -22,6 +22,7 @@ public class MovieData implements Parcelable {
         this.vote_average = vote_average;
         this.plot_synopsis = plot_synopsis;
         this.favorite = "no";
+        this.source = source;
     }
 
     /*
@@ -36,6 +37,7 @@ public class MovieData implements Parcelable {
         vote_average = p.readString();
         plot_synopsis = p.readString();
         favorite = p.readString();
+        source = p.readString();
     }
 
     public static final Parcelable.Creator<MovieData> CREATOR = new Parcelable.Creator<MovieData>(){
@@ -68,6 +70,7 @@ public class MovieData implements Parcelable {
         dest.writeString(vote_average);
         dest.writeString(plot_synopsis);
         dest.writeString(favorite);
+        dest.writeString(source);
     }
 
     public String getTitle() {
@@ -117,4 +120,8 @@ public class MovieData implements Parcelable {
     public String getFavorite() { return favorite; }
 
     public void setFavorite(String fav) {this.favorite = fav; }
+
+    public String getSource() { return source; }
+
+    public void setSource(String s) { this.source = s; }
 }

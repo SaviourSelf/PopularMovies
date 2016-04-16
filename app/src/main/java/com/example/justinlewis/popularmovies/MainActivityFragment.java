@@ -175,13 +175,17 @@ public class MainActivityFragment extends Fragment {
 
             if (params[0].equals(FAVORITE))
             {
-                //Don't make an API call, just get the favorite movies.
-                //Must return a MovieData [] array.
                 return getFavorites();
             }
 
             String movieUrl = getPopularMovieURL(params[0]);
             String json = readPopularMovieData(movieUrl);
+
+            if (json.isEmpty() || json == null)
+            {
+                //No Internet, get from DB.
+                return fetchFromDb();
+            }
 
             MovieData [] movieData = null;
 
@@ -203,6 +207,38 @@ public class MainActivityFragment extends Fragment {
                     .appendPath("w185")
                     .appendPath(imagePath.substring(1));
             return builder.build().toString();
+        }
+
+
+        private MovieData [] fetchFromDb()
+        {
+            String title, id, plot, vote, date, poster;
+            int index = 0;
+            MovieData [] data;
+            Cursor cursor;
+            cursor = getContext().getContentResolver().query(
+                    MovieProvider.CONTENT_URI,
+                    null,
+                    MovieProvider.SOURCE_FIELD + " =?",         //Where favorite field = true
+                    new String [] {lastChosen},
+                    null
+            );
+
+            data = new MovieData[cursor.getCount()];
+
+            if (cursor.getCount() > 0 && cursor.moveToFirst())
+                do {
+                    title = cursor.getString(cursor.getColumnIndex(MovieProvider.TITLE_FIELD));
+                    id = cursor.getString(cursor.getColumnIndex(MovieProvider.ID_FIELD));
+                    plot = cursor.getString(cursor.getColumnIndex(MovieProvider.PLOT_FIELD));
+                    date= cursor.getString(cursor.getColumnIndex(MovieProvider.RELEASE_DATE_FIELD));
+                    vote = cursor.getString(cursor.getColumnIndex(MovieProvider.VOTER_AVERAGE_FIELD));
+                    poster = cursor.getString(cursor.getColumnIndex(MovieProvider.POSTER_URL_FIELD));
+
+                    data[index++] = new MovieData(id, title, date, poster, vote, plot, lastChosen);
+                } while (cursor.moveToNext());
+            cursor.close();
+            return data;
         }
 
         private MovieData [] getFavorites()
@@ -230,7 +266,7 @@ public class MainActivityFragment extends Fragment {
                     vote = cursor.getString(cursor.getColumnIndex(MovieProvider.VOTER_AVERAGE_FIELD));
                     poster = cursor.getString(cursor.getColumnIndex(MovieProvider.POSTER_URL_FIELD));
 
-                    data[index++] = new MovieData(id, title, date, poster, vote, plot);
+                    data[index++] = new MovieData(id, title, date, poster, vote, plot, lastChosen);
                 } while (cursor.moveToNext());
             cursor.close();
             return data;
@@ -266,7 +302,8 @@ public class MainActivityFragment extends Fragment {
                         o.getString("release_date"),               // Release Date
                         buildImageURL(o.getString("poster_path")), // Poster Url
                         o.getString("vote_average"),               // Vote average
-                        o.getString("overview"));                  // Plot
+                        o.getString("overview"),                   // Plot
+                        lastChosen);                               // Source (Popular / Top)
                 Log.v(LOG_TAG, "ID: " + retVal[i].getId());
 
                 //If it doesn't exist in the DB, create it in the DB.
@@ -285,6 +322,7 @@ public class MainActivityFragment extends Fragment {
                     values.put(MovieProvider.RELEASE_DATE_FIELD, retVal[i].getRelease_date());
                     values.put(MovieProvider.TITLE_FIELD, retVal[i].getTitle());
                     values.put(MovieProvider.VOTER_AVERAGE_FIELD, retVal[i].getVote_average());
+                    values.put(MovieProvider.SOURCE_FIELD, lastChosen);
                     Uri uri = getContext().getContentResolver().insert(MovieProvider.CONTENT_URI, values);
                 }
                 cursor.close();
