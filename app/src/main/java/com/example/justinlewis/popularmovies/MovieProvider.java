@@ -36,6 +36,7 @@ public class MovieProvider extends ContentProvider {
     public static final String POSTER_URL_FIELD = "posterUrl";
     public static final String RELEASE_DATE_FIELD = "releaseDate";
     public static final String PLOT_FIELD = "plot";
+    public static final String FAVORITE_FIELD = "favorite";
 
     static final int MOVIES = 1;
 
@@ -64,34 +65,11 @@ public class MovieProvider extends ContentProvider {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(TABLE_NAME);
 
-        /*
-        int segments = uri.getPathSegments().size();
-        int match = sUriMatcher.match(uri);
-        String str = uri.getPathSegments().get(0);
-        if (uri.getPathSegments().size() > 20)
-            qb.appendWhere( ID_FIELD + "=" + uri.getPathSegments().get(1));
-        switch (sUriMatcher.match(uri)) {
-            case STUDENTS:
-                qb.setProjectionMap(STUDENTS_PROJECTION_MAP);
-                break;
-
-            case ID_FIELD:
-                qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1));
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-        */
-
         if (sortOrder == null || sortOrder == ""){
             sortOrder = TITLE_FIELD;
         }
         Cursor c = qb.query(db,	projection,	selection, selectionArgs,null, null, sortOrder);
 
-        /**
-         * register to watch a content URI for changes
-         */
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
@@ -143,7 +121,8 @@ public class MovieProvider extends ContentProvider {
                 RELEASE_DATE_FIELD + " TEXT NOT NULL, " +
                 POSTER_URL_FIELD + " TEXT NOT NULL, " +
                 PLOT_FIELD + " TEXT NOT NULL, " +
-                VOTER_AVERAGE_FIELD + " TEXT NOT NULL" +
+                VOTER_AVERAGE_FIELD + " TEXT NOT NULL, " +
+                FAVORITE_FIELD + " BOOLEAN NOT NULL DEFAULT 0" +
                 ");";
 
         /*

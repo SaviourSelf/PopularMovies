@@ -12,6 +12,7 @@ public class MovieData implements Parcelable {
 
     private String title, release_date, poster_url, vote_average, plot_synopsis;
     private int id;
+    private boolean favorite;
 
     public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis)
     {
@@ -21,6 +22,7 @@ public class MovieData implements Parcelable {
         this.poster_url = poster_url;
         this.vote_average = vote_average;
         this.plot_synopsis = plot_synopsis;
+        this.favorite = false;
     }
 
     /*
@@ -34,6 +36,7 @@ public class MovieData implements Parcelable {
         poster_url = p.readString();
         vote_average = p.readString();
         plot_synopsis = p.readString();
+        favorite = p.readByte() != 0;
     }
 
     public static final Parcelable.Creator<MovieData> CREATOR = new Parcelable.Creator<MovieData>(){
@@ -65,6 +68,7 @@ public class MovieData implements Parcelable {
         dest.writeString(poster_url);
         dest.writeString(vote_average);
         dest.writeString(plot_synopsis);
+        dest.writeByte((byte) (favorite ? 1 : 0));
     }
 
     public String getTitle() {
@@ -106,4 +110,8 @@ public class MovieData implements Parcelable {
     public void setPlot_synopsis(String plot_synopsis) {
         this.plot_synopsis = plot_synopsis;
     }
+
+    public boolean getFavorite() { return favorite; }
+
+    public void setFavorite(boolean fav) {this.favorite = fav; }
 }
