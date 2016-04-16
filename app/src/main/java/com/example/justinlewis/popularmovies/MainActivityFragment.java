@@ -113,6 +113,8 @@ public class MainActivityFragment extends Fragment {
             getActivity().setTitle(getString(R.string.main_activity_title_top_rated));
         if (s.equals(POPULAR_URL))
             getActivity().setTitle(getString(R.string.main_activity_title_popular));
+        if (s.equals(FAVORITE))
+            getActivity().setTitle(getString(R.string.main_activity_title_favorite));
         getMoviePosters(s);
     }
 
@@ -213,7 +215,7 @@ public class MainActivityFragment extends Fragment {
                     MovieProvider.CONTENT_URI,
                     null,
                     MovieProvider.FAVORITE_FIELD + " =?",         //Where favorite field = true
-                    new String [] {"Batman"},
+                    new String [] {"yes"},
                     null
             );
 

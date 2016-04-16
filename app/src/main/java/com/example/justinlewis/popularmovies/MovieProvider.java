@@ -124,7 +124,7 @@ public class MovieProvider extends ContentProvider {
                 POSTER_URL_FIELD + " TEXT NOT NULL, " +
                 PLOT_FIELD + " TEXT NOT NULL, " +
                 VOTER_AVERAGE_FIELD + " TEXT NOT NULL, " +
-                FAVORITE_FIELD + " BOOLEAN NOT NULL DEFAULT 0" +
+                FAVORITE_FIELD + " TEXT NOT NULL" +
                 ");";
 
         /*
