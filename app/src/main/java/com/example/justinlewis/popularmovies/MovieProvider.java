@@ -110,7 +110,7 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 
     @Override
