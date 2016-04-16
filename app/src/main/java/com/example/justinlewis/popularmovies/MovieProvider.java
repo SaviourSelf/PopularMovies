@@ -56,6 +56,8 @@ public class MovieProvider extends ContentProvider {
     public boolean onCreate() {
         mOpenHelper = new MainDatabaseHelper(getContext());
         db = mOpenHelper.getWritableDatabase();
+        mOpenHelper.onUpgrade(db,0,1);
+        db = mOpenHelper.getWritableDatabase();
         return true;
     }
 

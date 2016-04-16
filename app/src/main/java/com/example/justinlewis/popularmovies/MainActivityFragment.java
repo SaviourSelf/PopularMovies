@@ -46,6 +46,7 @@ public class MainActivityFragment extends Fragment {
 
     public final String POPULAR_URL = "popular";
     public final String TOP_RATED_URL = "top_rated";
+    public final String FAVORITE = "favorite";
     private String lastChosen = POPULAR_URL;
 
     public MainActivityFragment() {
@@ -148,6 +149,13 @@ public class MainActivityFragment extends Fragment {
             getActivity().setTitle(getString(R.string.main_activity_title_top_rated));
             return true;
         }
+        if (id == R.id.action_favorite_movies)
+        {
+            getMoviePosters(FAVORITE);
+            lastChosen = FAVORITE;
+            SavePreferences();
+            getActivity().setTitle(getString(R.string.main_activity_title_favorite));
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -162,6 +170,13 @@ public class MainActivityFragment extends Fragment {
         {
             if (params.length == 0)
                 return null;
+
+            if (params[0].equals(FAVORITE))
+            {
+                //Don't make an API call, just get the favorite movies.
+                //Must return a MovieData [] array.
+                return getFavorites();
+            }
 
             String movieUrl = getPopularMovieURL(params[0]);
             String json = readPopularMovieData(movieUrl);
@@ -188,6 +203,38 @@ public class MainActivityFragment extends Fragment {
             return builder.build().toString();
         }
 
+        private MovieData [] getFavorites()
+        {
+            String title, id, plot, vote, date, poster;
+            int index = 0;
+            MovieData [] data;
+            Cursor cursor;
+            cursor = getContext().getContentResolver().query(
+                    MovieProvider.CONTENT_URI,
+                    null,
+                    MovieProvider.FAVORITE_FIELD + " =?",         //Where favorite field = true
+                    new String [] {"Batman"},
+                    null
+            );
+
+            data = new MovieData[cursor.getCount()];
+
+            if (cursor.getCount() > 0 && cursor.moveToFirst())
+                do {
+                    title = cursor.getString(cursor.getColumnIndex(MovieProvider.TITLE_FIELD));
+                    id = cursor.getString(cursor.getColumnIndex(MovieProvider.ID_FIELD));
+                    plot = cursor.getString(cursor.getColumnIndex(MovieProvider.PLOT_FIELD));
+                    date= cursor.getString(cursor.getColumnIndex(MovieProvider.RELEASE_DATE_FIELD));
+                    vote = cursor.getString(cursor.getColumnIndex(MovieProvider.VOTER_AVERAGE_FIELD));
+                    poster = cursor.getString(cursor.getColumnIndex(MovieProvider.POSTER_URL_FIELD));
+
+                    data[index++] = new MovieData(id, title, date, poster, vote, plot);
+                } while (cursor.moveToNext());
+            cursor.close();
+            return data;
+        }
+
+
         private String getPopularMovieURL(String popOrRated)
         {
             Uri.Builder builder = new Uri.Builder();
@@ -204,7 +251,6 @@ public class MainActivityFragment extends Fragment {
 
         private MovieData [] getMoviePosters(String jsonString) throws JSONException
         {
-
             JSONObject fullJson = new JSONObject(jsonString);
             JSONArray array = fullJson.getJSONArray("results");
             MovieData [] retVal = new MovieData [array.length()];
