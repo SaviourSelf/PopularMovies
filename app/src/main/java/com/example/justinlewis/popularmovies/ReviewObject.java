@@ -53,4 +53,6 @@ public class ReviewObject implements Parcelable {
         dest.writeString(author);
         dest.writeString(url);
     }
+
+    public String getContent() {return content;}
 }

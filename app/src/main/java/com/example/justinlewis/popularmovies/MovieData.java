@@ -134,4 +134,8 @@ public class MovieData implements Parcelable {
     public String getSource() { return source; }
 
     public void setSource(String s) { this.source = s; }
+
+    public ReviewObject [] getReviewObject() { return reviewObject; }
+
+    public void setReviewObject(ReviewObject [] r) {this.reviewObject = r;}
 }

@@ -58,6 +58,7 @@ public class DetailActivity extends ActionBarActivity {
             voteAverage.setText("Vote average: " + model.getVote_average() + "/10");
             releaseDate.setText(model.getRelease_date());
             moviePlot.setText(model.getPlot_synopsis());
+            //moviePlot.setText(model.getReviewObject()[0].getContent());
             movieTitle.setText(model.getTitle());
             Picasso.with(view.getContext()).load(model.getPoster_url())
                     .into(imageView);

@@ -287,7 +287,7 @@ public class MainActivityFragment extends Fragment {
                     .appendPath(videosOrReviews)
                     .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
 
-            System.out.println(builder.build().toString());
+            //System.out.println(builder.build().toString());
             return builder.build().toString();
         }
 
@@ -302,7 +302,7 @@ public class MainActivityFragment extends Fragment {
                     .appendPath(popOrRated)
                     .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
 
-            System.out.println(builder.build().toString());
+            //System.out.println(builder.build().toString());
             return builder.build().toString();
         }
 
@@ -328,8 +328,8 @@ public class MainActivityFragment extends Fragment {
                 String a,b;
                 a= buildTrailersOrReviewsURL(retVal[i].getId() + "", "videos");
                 b= buildTrailersOrReviewsURL(retVal[i].getId() + "", "reviews");
-                System.out.println(a);
-                System.out.println(b);
+                //System.out.println(a);
+                //System.out.println(b);
 
                 //If it doesn't exist in the DB, create it in the DB.
                 Cursor cursor;
@@ -342,6 +342,8 @@ public class MainActivityFragment extends Fragment {
                 );
 
                 ReviewObject [] r = getReviewsFromUrl(b);
+
+                retVal[i].setReviewObject(r);
 
                 if (cursor.getCount() > 0) {
                     values.put(MovieProvider.ID_FIELD, retVal[i].getId());
@@ -359,10 +361,23 @@ public class MainActivityFragment extends Fragment {
             return retVal;
         }
 
-        private ReviewObject [] getReviewsFromUrl(String url)
+        private ReviewObject [] getReviewsFromUrl(String url) throws JSONException
         {
             String data = readPopularMovieData(url);
-            return null;
+            JSONObject fullJson = new JSONObject(data);
+            JSONArray array = fullJson.getJSONArray("results");
+            ReviewObject [] retVal = new ReviewObject [array.length()];
+            for (int i = 0; i < array.length(); i++)
+            {
+                JSONObject o = array.getJSONObject(i);
+                retVal[i] = new ReviewObject(
+                        o.getString("id"),
+                        o.getString("content"),
+                        o.getString("author"),
+                        o.getString("url")
+                        );
+            }
+            return retVal;
         }
 
 
