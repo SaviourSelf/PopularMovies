@@ -1,5 +1,6 @@
 package com.example.justinlewis.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Movie;
@@ -207,6 +208,7 @@ public class MainActivityFragment extends Fragment {
             MovieData [] retVal = new MovieData [array.length()];
             for (int i = 0; i < array.length(); i++)
             {
+                ContentValues values = new ContentValues();
                 JSONObject o = array.getJSONObject(i);
                 retVal[i] = new MovieData(
                         o.getString("id"),
@@ -215,6 +217,14 @@ public class MainActivityFragment extends Fragment {
                         buildImageURL(o.getString("poster_path")), // Poster Url
                         o.getString("vote_average"),               // Vote average
                         o.getString("overview"));                  // Plot
+
+                values.put(MovieProvider.ID_FIELD, retVal[i].getId());
+                values.put(MovieProvider.PLOT_FIELD, retVal[i].getPlot_synopsis());
+                values.put(MovieProvider.POSTER_URL_FIELD, retVal[i].getPoster_url());
+                values.put(MovieProvider.RELEASE_DATE_FIELD, retVal[i].getRelease_date());
+                values.put(MovieProvider.TITLE_FIELD, retVal[i].getTitle());
+                values.put(MovieProvider.VOTER_AVERAGE_FIELD, retVal[i].getVote_average());
+                Uri uri = getContext().getContentResolver().insert(MovieProvider.CONTENT_URI, values);
             }
             return retVal;
         }

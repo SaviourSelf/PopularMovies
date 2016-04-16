@@ -79,6 +79,10 @@ public class MovieData implements Parcelable {
         this.title = title;
     }
 
+    public int getId() {return this.id;}
+
+    public void setID(String id) {this.id = Integer.parseInt(id);}
+
     public String getRelease_date() {
         return release_date;
     }

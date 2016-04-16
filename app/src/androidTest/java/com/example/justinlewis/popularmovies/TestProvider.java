@@ -53,6 +53,7 @@ public class TestProvider extends AndroidTestCase {
         assertEquals("Error: Records not deleted from Weather table during delete", 0, cursor.getCount());
 
         Uri uri = mContext.getContentResolver().insert(MovieProvider.CONTENT_URI, values);
+        addAnother();
 
         cursor.close();
 
@@ -71,10 +72,37 @@ public class TestProvider extends AndroidTestCase {
 
         assertEquals("Error: Failure to set favorite", 1, ret);
 
-        assertEquals("Error: Record insert failed.", 1, cursor.getCount());
+        assertEquals("Error: Record insert failed.", 2, cursor.getCount());
+
+        cursor.close();
+
+        //Now query favorites and get 1.
+        cursor = mContext.getContentResolver().query(
+                MovieProvider.CONTENT_URI,
+                null,
+                null,
+                new String [] {MovieProvider.FAVORITE_FIELD + " = 1"},
+                null
+        );
+
+        assertEquals("Error: Favorite query failed.", 1, cursor.getCount());
 
         cursor.close();
     }
+
+    public void addAnother()
+    {
+        ContentValues values = new ContentValues();
+        values.put(MovieProvider.ID_FIELD, "2");
+        values.put(MovieProvider.PLOT_FIELD, "some plot");
+        values.put(MovieProvider.POSTER_URL_FIELD, "Some url");
+        values.put(MovieProvider.RELEASE_DATE_FIELD, "some date");
+        values.put(MovieProvider.TITLE_FIELD, "john cena");
+        values.put(MovieProvider.VOTER_AVERAGE_FIELD, "11/10");
+        Uri uri = mContext.getContentResolver().insert(MovieProvider.CONTENT_URI, values);
+
+    }
+
 
     /*
        This helper function deletes all records from both database tables using the database
