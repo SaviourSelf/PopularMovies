@@ -41,6 +41,7 @@ public class TrailerObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(trailerName);
+        dest.writeString(trailerUrl);
     }
 }
