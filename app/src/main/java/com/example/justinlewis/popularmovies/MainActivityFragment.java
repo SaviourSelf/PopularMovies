@@ -356,6 +356,7 @@ public class MainActivityFragment extends Fragment {
                     values.put(MovieProvider.VOTER_AVERAGE_FIELD, retVal[i].getVote_average());
                     values.put(MovieProvider.SOURCE_FIELD, lastChosen);
                     values.put(MovieProvider.REVIEW_FIELD, packReviews(r));
+                    values.put(MovieProvider.TRAILER_FIELD, packTrailers(t));
                     Uri uri = getContext().getContentResolver().insert(MovieProvider.CONTENT_URI, values);
                 }
                 cursor.close();
@@ -417,6 +418,11 @@ public class MainActivityFragment extends Fragment {
             return gson.toJson(r);
         }
 
+        private String packTrailers(TrailerObject [] r)
+        {
+            Gson gson = new Gson();
+            return gson.toJson(r);
+        }
 
         @Override
         protected void onPostExecute(MovieData[] capturedList) {
