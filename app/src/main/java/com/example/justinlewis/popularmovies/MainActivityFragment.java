@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,8 @@ public class MainActivityFragment extends Fragment {
     public final String TOP_RATED_URL = "top_rated";
     public final String FAVORITE = "favorite";
     private String lastChosen = POPULAR_URL;
+
+    public static int callCount = 0;
 
     public MainActivityFragment() {
 
@@ -326,8 +329,8 @@ public class MainActivityFragment extends Fragment {
                 //Log.v(LOG_TAG, "ID: " + retVal[i].getId());
 
                 String a,b;
-                a= buildTrailersOrReviewsURL(retVal[i].getId() + "", "videos");
-                b= buildTrailersOrReviewsURL(retVal[i].getId() + "", "reviews");
+                //a= buildTrailersOrReviewsURL(retVal[i].getId() + "", "videos");
+                //b= buildTrailersOrReviewsURL(retVal[i].getId() + "", "reviews");
                 //System.out.println(a);
                 //System.out.println(b);
 
@@ -341,8 +344,11 @@ public class MainActivityFragment extends Fragment {
                         null
                 );
 
-                ReviewObject [] r = getReviewsFromUrl(b);
-                TrailerObject [] t = getVideosFromUrl(a);
+                //RateLimit is 30 requests per 10 seconds;
+                //This will fail!
+
+                ReviewObject [] r = null; // = getReviewsFromUrl(b);
+                TrailerObject [] t = null;// = getVideosFromUrl(a);
 
                 retVal[i].setReviewObject(r);
                 retVal[i].setTrailerObject(t);
@@ -435,10 +441,14 @@ public class MainActivityFragment extends Fragment {
         }
 
         private String readPopularMovieData(String movieUrl) {
+
+            movieUrl = movieUrl.trim();
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
             String popularMovieJSON = null;
+
+            System.out.println("Call count: " + callCount++);
 
             try {
                 URL url = new URL(movieUrl);
