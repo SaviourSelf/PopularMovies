@@ -8,6 +8,18 @@ import android.os.Parcelable;
  */
 public class TrailerObject implements Parcelable {
 
+    String trailerUrl, trailerName;
+
+    public TrailerObject(Parcel p)
+    {
+        trailerName = p.readString();
+        trailerUrl = p.readString();
+    }
+
+    public TrailerObject(String name, String url) {
+        this.trailerName = name;
+        this.trailerUrl = url;
+    }
 
     public static final Parcelable.Creator<TrailerObject> CREATOR = new Parcelable.Creator<TrailerObject>(){
 
