@@ -13,14 +13,15 @@ public class MovieData implements Parcelable {
     private String title, release_date, poster_url, vote_average, plot_synopsis, favorite, source;
     private int id;
     private ReviewObject [] reviewObject;
+    private TrailerObject [] trailerObject;
 
     public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis, String source)
     {
-        this(id,title,release_date,poster_url,vote_average,plot_synopsis,source,null);
+        this(id,title,release_date,poster_url,vote_average,plot_synopsis,source,null, null);
     }
 
 
-    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis, String source, ReviewObject [] r)
+    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis, String source, ReviewObject [] r, TrailerObject [] t)
     {
         this.id = Integer.parseInt(id);
         this.title = title;
@@ -31,6 +32,7 @@ public class MovieData implements Parcelable {
         this.favorite = "no";
         this.source = source;
         this.reviewObject = r;
+        this.trailerObject = t;
     }
 
     /*
@@ -47,6 +49,7 @@ public class MovieData implements Parcelable {
         favorite = p.readString();
         source = p.readString();
         reviewObject = p.createTypedArray(ReviewObject.CREATOR);
+        trailerObject = p.createTypedArray(TrailerObject.CREATOR);
     }
 
     public static final Parcelable.Creator<MovieData> CREATOR = new Parcelable.Creator<MovieData>(){
@@ -138,4 +141,8 @@ public class MovieData implements Parcelable {
     public ReviewObject [] getReviewObject() { return reviewObject; }
 
     public void setReviewObject(ReviewObject [] r) {this.reviewObject = r;}
+
+    public TrailerObject [] getTrailerObject() { return trailerObject; }
+
+    public void setTrailerObject(TrailerObject [] r) {this.trailerObject = r;}
 }

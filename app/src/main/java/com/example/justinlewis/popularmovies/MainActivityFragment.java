@@ -342,8 +342,10 @@ public class MainActivityFragment extends Fragment {
                 );
 
                 ReviewObject [] r = getReviewsFromUrl(b);
+                TrailerObject [] t = getVideosFromUrl(a);
 
                 retVal[i].setReviewObject(r);
+                retVal[i].setTrailerObject(t);
 
                 if (cursor.getCount() > 0) {
                     values.put(MovieProvider.ID_FIELD, retVal[i].getId());
@@ -357,6 +359,26 @@ public class MainActivityFragment extends Fragment {
                     Uri uri = getContext().getContentResolver().insert(MovieProvider.CONTENT_URI, values);
                 }
                 cursor.close();
+            }
+            return retVal;
+        }
+
+        private TrailerObject [] getVideosFromUrl(String url) throws JSONException
+        {
+            String data = readPopularMovieData(url);
+            JSONObject fullJson = new JSONObject(data);
+            JSONArray array = fullJson.getJSONArray("results");
+            TrailerObject [] retVal = new TrailerObject [array.length()];
+            for (int i = 0; i < array.length(); i++)
+            {
+                //https://www.youtube.com/watch?v=
+                JSONObject o = array.getJSONObject(i);
+                String key = o.getString("key");
+                key = "https://www.youtube.com/watch?v=" + key;
+                retVal[i] = new TrailerObject(
+                        o.getString("name"),
+                        key
+                );
             }
             return retVal;
         }
