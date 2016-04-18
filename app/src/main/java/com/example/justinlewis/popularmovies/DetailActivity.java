@@ -65,6 +65,9 @@ public class DetailActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         //Share information
+        int id = item.getItemId();
+        if (id != R.id.menu_item_share)
+            return false;
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
@@ -108,7 +111,6 @@ public class DetailActivity extends ActionBarActivity {
             voteAverage.setText("Vote average: " + model.getVote_average() + "/10");
             releaseDate.setText(model.getRelease_date());
             moviePlot.setText(model.getPlot_synopsis());
-            //moviePlot.setText(model.getReviewObject()[0].getContent());
             movieTitle.setText(model.getTitle());
             Picasso.with(view.getContext()).load(model.getPoster_url())
                     .into(imageView);
@@ -148,7 +150,21 @@ public class DetailActivity extends ActionBarActivity {
             @Override
             protected void onPostExecute(MovieData model) {
                 super.onPostExecute(model);
-                moviePlot.setText(moviePlot.getText() + "\n" + model.getReviewObject()[0].getContent());
+                TrailerObject [] trailers = model.getTrailerObject();
+                ReviewObject [] reviews = model.getReviewObject();
+
+                String text = moviePlot.getText() + "\n\n\nTrailers:\n\n";
+
+                for (TrailerObject t : trailers)
+                {
+                    text = text + t.trailerName + "\n" + t.trailerUrl + "\n\n";
+                }
+
+                for (ReviewObject r : reviews)
+                {
+                    text = text + r.getContent()+ "\n";
+                }
+                moviePlot.setText(text);
             }
 
 
