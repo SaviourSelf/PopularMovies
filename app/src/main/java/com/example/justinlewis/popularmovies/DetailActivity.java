@@ -100,7 +100,8 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             model = (MovieData) getArguments().getParcelable("MODEL");
-            getReviewsAndTrailers();
+            if (model.getReviewObject() != null && model.getTrailerObject() != null)
+                getReviewsAndTrailers();
             View view = inflater.inflate(R.layout.fragment_detail, container, false);
             movieTitle = (TextView) view.findViewById(R.id.movie_title);
             moviePlot = (TextView) view.findViewById(R.id.plotSynopsisText);
