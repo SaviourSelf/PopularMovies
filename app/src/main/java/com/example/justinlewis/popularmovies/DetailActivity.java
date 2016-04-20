@@ -1,5 +1,6 @@
 package com.example.justinlewis.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -139,6 +140,7 @@ public class DetailActivity extends ActionBarActivity {
                 try {
                     r = getReviewsFromUrl(b);
                     t = getVideosFromUrl(a);
+                    updateDB(r,t);
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
@@ -166,6 +168,15 @@ public class DetailActivity extends ActionBarActivity {
                     text = text + r.getContent()+ "\n";
                 }
                 moviePlot.setText(text);
+            }
+
+            private void updateDB(ReviewObject [] reviewObjects, TrailerObject [] trailerObjects)
+            {
+                ContentValues values = new ContentValues();
+                values.put(MovieProvider.REVIEW_FIELD, packReviews(reviewObjects));
+                values.put(MovieProvider.TRAILER_FIELD, packTrailers(trailerObjects));
+
+                int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, model.getId() + "", null);
             }
 
 
