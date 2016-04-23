@@ -203,7 +203,6 @@ public class DetailActivity extends ActionBarActivity {
                 TrailerObject [] retVal = new TrailerObject [array.length()];
                 for (int i = 0; i < array.length(); i++)
                 {
-                    //https://www.youtube.com/watch?v=
                     JSONObject o = array.getJSONObject(i);
                     String key = o.getString("key");
                     key = "https://www.youtube.com/watch?v=" + key;
