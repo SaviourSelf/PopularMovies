@@ -181,6 +181,8 @@ public class DetailActivity extends ActionBarActivity {
         private void setStar(boolean b)
         {
             //MenuItem mi = (MenuItem)this.getContext().findViewById(R.id.menu_favorite_this);
+            if (this.menuItem == null)
+                return;
             if (b)
                 this.menuItem.setIcon(android.R.drawable.star_big_on);
             else
