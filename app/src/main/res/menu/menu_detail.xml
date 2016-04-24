@@ -16,4 +16,10 @@
         android:icon="@android:drawable/ic_menu_share"
         android:actionProviderClass=
             "android.widget.ShareActionProvider" />
+    <item
+        android:id="@+id/menu_favorite_this"
+        android:title="Favorite"
+        app:showAsAction="always"
+        android:icon="@android:drawable/star_big_off">
+    </item>
 </menu>

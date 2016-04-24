@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,16 +66,9 @@ public class DetailActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        //Share information
+        //Share information -- handled in fragment.
         int id = item.getItemId();
-        if (id != R.id.menu_item_share)
-            return false;
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out ");
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
-        return true;
+        return false;
     }
 
     @Override
@@ -86,12 +80,56 @@ public class DetailActivity extends ActionBarActivity {
     public static class DetailActivityFragment extends Fragment {
 
         MovieData model;
-
         TextView movieTitle;
         TextView moviePlot;
         TextView releaseDate;
         TextView voteAverage;
         ImageView imageView;
+
+        @Override
+        public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+            // Do something that differs the Activity's menu here
+            super.onCreateOptionsMenu(menu, inflater);
+            int icon = android.R.drawable.star_big_on;
+            if (!model.getFavorite().equals("no")) {
+                menu.getItem(1).setIcon(icon);
+            }
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
+            //Share information
+            int id = item.getItemId();
+            if (id == R.id.menu_item_share) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out " + model.getTitle() +
+                        " and its trailer: " + model.getTrailerObject()[0]);
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+                return true;
+            }
+            if (id == R.id.menu_favorite_this)
+            {
+                if (model.getFavorite().equals("no")) {
+                    model.setFavorite("yes");
+                    item.setIcon(android.R.drawable.star_big_on);
+                    updateDBFavorite("yes");
+                } else {
+                    model.setFavorite("no");
+                    item.setIcon(android.R.drawable.star_big_off);
+                    updateDBFavorite("no");
+                }
+            }
+            return true;
+        }
+
+        private void updateDBFavorite(String str)
+        {
+            FetchMovieTrailerAndReviewTask t = new FetchMovieTrailerAndReviewTask();
+            t.execute(str);
+        }
 
         public DetailActivityFragment() {
 
@@ -101,17 +139,7 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             model = (MovieData) getArguments().getParcelable("MODEL");
-            /*
-            if (model.getReviewObject() != null && model.getTrailerObject() != null) {
-                if (model.getReviewObject().length != 0 || model.getTrailerObject().length != 0) {
-                    getReviewsAndTrailers();
-                } else {
-                    Log.d("onCreateView : ", "objects aren't of length 0");
-                }
-            } else {
-                Log.d("onCreateView : ", "objects aren't null");
-            }
-            */
+
             getReviewsAndTrailers();
             View view = inflater.inflate(R.layout.fragment_detail, container, false);
             movieTitle = (TextView) view.findViewById(R.id.movie_title);
@@ -124,6 +152,7 @@ public class DetailActivity extends ActionBarActivity {
             releaseDate.setText(model.getRelease_date());
             moviePlot.setText(model.getPlot_synopsis());
             movieTitle.setText(model.getTitle());
+
             Picasso.with(view.getContext()).load(model.getPoster_url())
                     .into(imageView);
 
@@ -132,16 +161,22 @@ public class DetailActivity extends ActionBarActivity {
         public void getReviewsAndTrailers()
         {
             FetchMovieTrailerAndReviewTask t = new FetchMovieTrailerAndReviewTask();
-            t.execute();
+            t.execute("ReviewsAndTrailers");
         }
 
         //Start subclass
 
-        public class FetchMovieTrailerAndReviewTask extends AsyncTask<Void, Void, MovieData> {
+        public class FetchMovieTrailerAndReviewTask extends AsyncTask<String, Void, MovieData> {
+
+            private boolean forFavorites = false;
 
             @Override
-            protected MovieData doInBackground(Void... v) {
-
+            protected MovieData doInBackground(String... v) {
+                if (!v[0].equals("ReviewsAndTrailers"))
+                {
+                    forFavorites = true;
+                    updateDBFavoriteBackground(v[0]);
+                }
                 String a,b;
                 a= buildTrailersOrReviewsURL(model.getId() + "", "videos");
                 b= buildTrailersOrReviewsURL(model.getId() + "", "reviews");
@@ -163,6 +198,8 @@ public class DetailActivity extends ActionBarActivity {
             @Override
             protected void onPostExecute(MovieData model) {
                 super.onPostExecute(model);
+                if (forFavorites == true)
+                    return;
                 TrailerObject [] trailers = model.getTrailerObject();
                 ReviewObject [] reviews = model.getReviewObject();
 
@@ -181,6 +218,14 @@ public class DetailActivity extends ActionBarActivity {
                 System.out.println(text);
 
             }
+
+            private void updateDBFavoriteBackground(String str)
+            {
+                ContentValues values = new ContentValues();
+                values.put(MovieProvider.FAVORITE_FIELD, str);
+                int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, model.getId() + "", null);
+            }
+
 
             private void updateDB(ReviewObject [] reviewObjects, TrailerObject [] trailerObjects)
             {
