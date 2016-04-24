@@ -180,7 +180,6 @@ public class DetailActivity extends ActionBarActivity {
 
         private void setStar(boolean b)
         {
-            //MenuItem mi = (MenuItem)this.getContext().findViewById(R.id.menu_favorite_this);
             if (this.menuItem == null)
                 return;
             if (b)
@@ -262,8 +261,6 @@ public class DetailActivity extends ActionBarActivity {
                     text = text + r.getContent()+ "\n";
                 }
                 moviePlot.setText(text);
-                //System.out.println(text);
-
             }
 
             private void isFavorite()
@@ -290,7 +287,6 @@ public class DetailActivity extends ActionBarActivity {
                 ContentValues values = new ContentValues();
                 values.put(MovieProvider.FAVORITE_FIELD, str);
                 int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, MovieProvider.ID_FIELD + " =? ", new String[] {model.getId() + ""});
-                //int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, null, null);
                 System.out.println("DB UPDATE FAVORITE RETURN: " + ret);
             }
 
@@ -317,7 +313,6 @@ public class DetailActivity extends ActionBarActivity {
                         .appendPath(videosOrReviews)
                         .appendQueryParameter("api_key", BuildConfig.MOVIE_API_KEY);
 
-                //System.out.println(builder.build().toString());
                 return builder.build().toString();
             }
 
