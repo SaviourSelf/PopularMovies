@@ -66,7 +66,7 @@ public class TestProvider extends AndroidTestCase {
         );
 
         ContentValues values2 = new ContentValues();
-        values2.put(MovieProvider.FAVORITE_FIELD, true);
+        values2.put(MovieProvider.FAVORITE_FIELD, "yes");
 
         int ret = mContext.getContentResolver().update(MovieProvider.CONTENT_URI, values2, "1", null);
 

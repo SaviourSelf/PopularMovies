@@ -256,7 +256,7 @@ public class MainActivityFragment extends Fragment {
             cursor = getContext().getContentResolver().query(
                     MovieProvider.CONTENT_URI,
                     null,
-                    MovieProvider.FAVORITE_FIELD + " =?",         //Where favorite field = true
+                    MovieProvider.FAVORITE_FIELD + " =? ",
                     new String [] {"yes"},
                     null
             );
@@ -329,10 +329,7 @@ public class MainActivityFragment extends Fragment {
                 //Log.v(LOG_TAG, "ID: " + retVal[i].getId());
 
                 String a,b;
-                //a= buildTrailersOrReviewsURL(retVal[i].getId() + "", "videos");
-                //b= buildTrailersOrReviewsURL(retVal[i].getId() + "", "reviews");
-                //System.out.println(a);
-                //System.out.println(b);
+
 
                 //If it doesn't exist in the DB, create it in the DB.
                 Cursor cursor;
@@ -352,6 +349,8 @@ public class MainActivityFragment extends Fragment {
 
                 retVal[i].setReviewObject(r);
                 retVal[i].setTrailerObject(t);
+
+                System.out.println("Cursor count: " + cursor.getCount());
 
                 if (cursor.getCount() > 0) {
                     values.put(MovieProvider.ID_FIELD, retVal[i].getId());

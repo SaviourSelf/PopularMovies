@@ -180,6 +180,7 @@ public class DetailActivity extends ActionBarActivity {
                 {
                     forFavorites = true;
                     updateDBFavoriteBackground(v[0]);
+                    return model;
                 }
                 String a,b;
                 a= buildTrailersOrReviewsURL(model.getId() + "", "videos");
@@ -227,7 +228,8 @@ public class DetailActivity extends ActionBarActivity {
             {
                 ContentValues values = new ContentValues();
                 values.put(MovieProvider.FAVORITE_FIELD, str);
-                int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, model.getId() + "", null);
+                //int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, MovieProvider.ID_FIELD, new String[] {model.getId() + ""});
+                int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, null, null);
                 System.out.println("DB UPDATE FAVORITE RETURN: " + ret);
             }
 
