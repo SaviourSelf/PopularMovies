@@ -71,7 +71,7 @@ public class DetailActivity extends ActionBarActivity {
             return false;
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out ");
         sendIntent.setType("text/plain");
         startActivity(sendIntent);
         return true;
@@ -101,8 +101,18 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             model = (MovieData) getArguments().getParcelable("MODEL");
-            if (model.getReviewObject() != null && model.getTrailerObject() != null)
-                getReviewsAndTrailers();
+            /*
+            if (model.getReviewObject() != null && model.getTrailerObject() != null) {
+                if (model.getReviewObject().length != 0 || model.getTrailerObject().length != 0) {
+                    getReviewsAndTrailers();
+                } else {
+                    Log.d("onCreateView : ", "objects aren't of length 0");
+                }
+            } else {
+                Log.d("onCreateView : ", "objects aren't null");
+            }
+            */
+            getReviewsAndTrailers();
             View view = inflater.inflate(R.layout.fragment_detail, container, false);
             movieTitle = (TextView) view.findViewById(R.id.movie_title);
             moviePlot = (TextView) view.findViewById(R.id.plotSynopsisText);
@@ -168,6 +178,8 @@ public class DetailActivity extends ActionBarActivity {
                     text = text + r.getContent()+ "\n";
                 }
                 moviePlot.setText(text);
+                System.out.println(text);
+
             }
 
             private void updateDB(ReviewObject [] reviewObjects, TrailerObject [] trailerObjects)
