@@ -68,6 +68,7 @@ public class DetailActivity extends ActionBarActivity {
     {
         //Share information -- handled in fragment.
         int id = item.getItemId();
+        //System.out.println("Felt that in class");
         return false;
     }
 
@@ -101,6 +102,7 @@ public class DetailActivity extends ActionBarActivity {
         {
             //Share information
             int id = item.getItemId();
+            //System.out.println("Felt that in fragment");
             if (id == R.id.menu_item_share) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
@@ -112,6 +114,7 @@ public class DetailActivity extends ActionBarActivity {
             }
             if (id == R.id.menu_favorite_this)
             {
+                //System.out.println("Updating favorite status.");
                 if (model.getFavorite().equals("no")) {
                     model.setFavorite("yes");
                     item.setIcon(android.R.drawable.star_big_on);
@@ -122,7 +125,7 @@ public class DetailActivity extends ActionBarActivity {
                     updateDBFavorite("no");
                 }
             }
-            return true;
+            return false;
         }
 
         private void updateDBFavorite(String str)
@@ -138,6 +141,7 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            setHasOptionsMenu(true);
             model = (MovieData) getArguments().getParcelable("MODEL");
 
             getReviewsAndTrailers();
@@ -215,7 +219,7 @@ public class DetailActivity extends ActionBarActivity {
                     text = text + r.getContent()+ "\n";
                 }
                 moviePlot.setText(text);
-                System.out.println(text);
+                //System.out.println(text);
 
             }
 
@@ -224,6 +228,7 @@ public class DetailActivity extends ActionBarActivity {
                 ContentValues values = new ContentValues();
                 values.put(MovieProvider.FAVORITE_FIELD, str);
                 int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, model.getId() + "", null);
+                System.out.println("DB UPDATE FAVORITE RETURN: " + ret);
             }
 
 
@@ -234,6 +239,7 @@ public class DetailActivity extends ActionBarActivity {
                 values.put(MovieProvider.TRAILER_FIELD, packTrailers(trailerObjects));
 
                 int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, model.getId() + "", null);
+                System.out.println("DB UPDATE REVIEW RETURN: " + ret);
             }
 
 
