@@ -218,7 +218,7 @@ public class MainActivityFragment extends Fragment {
 
         private MovieData [] fetchFromDb()
         {
-            String title, id, plot, vote, date, poster;
+            String title, id, plot, vote, date, poster, favorite;
             int index = 0;
             MovieData [] data;
             Cursor cursor;
@@ -240,8 +240,9 @@ public class MainActivityFragment extends Fragment {
                     date= cursor.getString(cursor.getColumnIndex(MovieProvider.RELEASE_DATE_FIELD));
                     vote = cursor.getString(cursor.getColumnIndex(MovieProvider.VOTER_AVERAGE_FIELD));
                     poster = cursor.getString(cursor.getColumnIndex(MovieProvider.POSTER_URL_FIELD));
+                    favorite = cursor.getString(cursor.getColumnIndex(MovieProvider.FAVORITE_FIELD));
 
-                    data[index++] = new MovieData(id, title, date, poster, vote, plot, lastChosen);
+                    data[index++] = new MovieData(id, title, date, poster, vote, plot, lastChosen, favorite);
                 } while (cursor.moveToNext());
             cursor.close();
             return data;
@@ -249,7 +250,7 @@ public class MainActivityFragment extends Fragment {
 
         private MovieData [] getFavorites()
         {
-            String title, id, plot, vote, date, poster;
+            String title, id, plot, vote, date, poster, favorite;
             int index = 0;
             MovieData [] data;
             Cursor cursor;
@@ -271,8 +272,10 @@ public class MainActivityFragment extends Fragment {
                     date= cursor.getString(cursor.getColumnIndex(MovieProvider.RELEASE_DATE_FIELD));
                     vote = cursor.getString(cursor.getColumnIndex(MovieProvider.VOTER_AVERAGE_FIELD));
                     poster = cursor.getString(cursor.getColumnIndex(MovieProvider.POSTER_URL_FIELD));
+                    favorite = cursor.getString(cursor.getColumnIndex(MovieProvider.FAVORITE_FIELD));
 
-                    data[index++] = new MovieData(id, title, date, poster, vote, plot, lastChosen);
+
+                    data[index++] = new MovieData(id, title, date, poster, vote, plot, lastChosen, favorite);
                 } while (cursor.moveToNext());
             cursor.close();
             return data;
@@ -325,7 +328,8 @@ public class MainActivityFragment extends Fragment {
                         buildImageURL(o.getString("poster_path")), // Poster Url
                         o.getString("vote_average"),               // Vote average
                         o.getString("overview"),                   // Plot
-                        lastChosen);                               // Source (Popular / Top)
+                        lastChosen,
+                        "no");                               // Source (Popular / Top)
                 //Log.v(LOG_TAG, "ID: " + retVal[i].getId());
 
                 String a,b;
@@ -350,9 +354,7 @@ public class MainActivityFragment extends Fragment {
                 retVal[i].setReviewObject(r);
                 retVal[i].setTrailerObject(t);
 
-                System.out.println("Cursor count: " + cursor.getCount());
-
-                if (cursor.getCount() > 0) {
+                if (cursor.getCount() == 0) {
                     values.put(MovieProvider.ID_FIELD, retVal[i].getId());
                     values.put(MovieProvider.PLOT_FIELD, retVal[i].getPlot_synopsis());
                     values.put(MovieProvider.POSTER_URL_FIELD, retVal[i].getPoster_url());
@@ -362,6 +364,7 @@ public class MainActivityFragment extends Fragment {
                     values.put(MovieProvider.SOURCE_FIELD, lastChosen);
                     values.put(MovieProvider.REVIEW_FIELD, packReviews(r));
                     values.put(MovieProvider.TRAILER_FIELD, packTrailers(t));
+                    values.put(MovieProvider.FAVORITE_FIELD, "no");
                     Uri uri = getContext().getContentResolver().insert(MovieProvider.CONTENT_URI, values);
                 }
                 cursor.close();

@@ -15,13 +15,13 @@ public class MovieData implements Parcelable {
     private ReviewObject [] reviewObject;
     private TrailerObject [] trailerObject;
 
-    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis, String source)
+    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis, String source, String favorite)
     {
-        this(id,title,release_date,poster_url,vote_average,plot_synopsis,source,null, null);
+        this(id,title,release_date,poster_url,vote_average,plot_synopsis,source,null, null, favorite);
     }
 
 
-    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis, String source, ReviewObject [] r, TrailerObject [] t)
+    public MovieData(String id, String title, String release_date, String poster_url, String vote_average, String plot_synopsis, String source, ReviewObject [] r, TrailerObject [] t, String favorite)
     {
         this.id = Integer.parseInt(id);
         this.title = title;
@@ -29,7 +29,7 @@ public class MovieData implements Parcelable {
         this.poster_url = poster_url;
         this.vote_average = vote_average;
         this.plot_synopsis = plot_synopsis;
-        this.favorite = "no";
+        this.favorite = favorite;
         this.source = source;
         this.reviewObject = r;
         this.trailerObject = t;

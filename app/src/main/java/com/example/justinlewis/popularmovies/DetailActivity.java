@@ -2,6 +2,7 @@ package com.example.justinlewis.popularmovies;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -86,11 +87,15 @@ public class DetailActivity extends ActionBarActivity {
         TextView releaseDate;
         TextView voteAverage;
         ImageView imageView;
+        MenuItem menuItem;
 
         @Override
         public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
             // Do something that differs the Activity's menu here
             super.onCreateOptionsMenu(menu, inflater);
+            MenuItem item = menu.getItem(1);
+            System.out.println("infalting...");
+            this.menuItem = item;
             int icon = android.R.drawable.star_big_on;
             if (!model.getFavorite().equals("no")) {
                 menu.getItem(1).setIcon(icon);
@@ -114,6 +119,7 @@ public class DetailActivity extends ActionBarActivity {
             }
             if (id == R.id.menu_favorite_this)
             {
+
                 //System.out.println("Updating favorite status.");
                 if (model.getFavorite().equals("no")) {
                     model.setFavorite("yes");
@@ -157,11 +163,37 @@ public class DetailActivity extends ActionBarActivity {
             moviePlot.setText(model.getPlot_synopsis());
             movieTitle.setText(model.getTitle());
 
+            checkDBForFavorite();
+
+            System.out.println("Is favorite: " + model.getFavorite());
+            if (model.getFavorite().equals("yes"))
+                setStar(true);
+            else
+                setStar(false);
+
+
             Picasso.with(view.getContext()).load(model.getPoster_url())
                     .into(imageView);
 
             return view;
         }
+
+        private void setStar(boolean b)
+        {
+            //MenuItem mi = (MenuItem)this.getContext().findViewById(R.id.menu_favorite_this);
+            if (b)
+                this.menuItem.setIcon(android.R.drawable.star_big_on);
+            else
+                this.menuItem.setIcon(android.R.drawable.star_big_off);
+        }
+
+
+        private void checkDBForFavorite()
+        {
+            FetchMovieTrailerAndReviewTask t = new FetchMovieTrailerAndReviewTask();
+            t.execute("queryFavorite");
+        }
+
         public void getReviewsAndTrailers()
         {
             FetchMovieTrailerAndReviewTask t = new FetchMovieTrailerAndReviewTask();
@@ -176,6 +208,14 @@ public class DetailActivity extends ActionBarActivity {
 
             @Override
             protected MovieData doInBackground(String... v) {
+
+                if (v[0].equals("queryFavorite"))
+                {
+                    forFavorites = true;
+                    isFavorite();
+                    return model;
+                }
+
                 if (!v[0].equals("ReviewsAndTrailers"))
                 {
                     forFavorites = true;
@@ -224,12 +264,31 @@ public class DetailActivity extends ActionBarActivity {
 
             }
 
+            private void isFavorite()
+            {
+                Cursor cursor;
+                cursor = getContext().getContentResolver().query(
+                        MovieProvider.CONTENT_URI,
+                        null,
+                        MovieProvider.FAVORITE_FIELD + " =? AND " + MovieProvider.ID_FIELD + " =? ",
+                        new String [] {"yes", model.getId() + ""},
+                        null
+                );
+                if (cursor.getCount() > 0) {
+                    model.setFavorite("yes");
+                } else {
+                    model.setFavorite("no");
+                }
+                cursor.close();
+            }
+
+
             private void updateDBFavoriteBackground(String str)
             {
                 ContentValues values = new ContentValues();
                 values.put(MovieProvider.FAVORITE_FIELD, str);
-                //int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, MovieProvider.ID_FIELD, new String[] {model.getId() + ""});
-                int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, null, null);
+                int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, MovieProvider.ID_FIELD + " =? ", new String[] {model.getId() + ""});
+                //int ret = getContext().getContentResolver().update(MovieProvider.CONTENT_URI, values, null, null);
                 System.out.println("DB UPDATE FAVORITE RETURN: " + ret);
             }
 
