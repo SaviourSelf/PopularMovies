@@ -53,9 +53,9 @@ public class DetailActivity extends ActionBarActivity {
 
         MovieData model = (MovieData) getIntent().getParcelableExtra("Editing");
         Bundle b = new Bundle();
-        b.putParcelable("MODEL", model);
+        b.putParcelable("Editing", model);
 
-        /*
+
         if (savedInstanceState == null) {
             DetailActivityFragment frag = new DetailActivityFragment();
             frag.setArguments(b);
@@ -63,7 +63,7 @@ public class DetailActivity extends ActionBarActivity {
                     .add(R.id.container, frag)
                     .commit();
         }
-        */
+
     }
 
     @Override
@@ -152,10 +152,10 @@ public class DetailActivity extends ActionBarActivity {
             setHasOptionsMenu(true);
             View view= inflater.inflate(R.layout.fragment_detail, container, false);
             try {
-                model = (MovieData) getArguments().getParcelable("MODEL");
+                model = (MovieData) getArguments().getParcelable("Editing");
 
                 getReviewsAndTrailers();
-                view = inflater.inflate(R.layout.fragment_detail, container, false);
+                //view = inflater.inflate(R.layout.fragment_detail, container, false);
                 movieTitle = (TextView) view.findViewById(R.id.movie_title);
                 moviePlot = (TextView) view.findViewById(R.id.plotSynopsisText);
                 releaseDate = (TextView) view.findViewById(R.id.movieReleaseYear);

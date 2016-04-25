@@ -69,12 +69,13 @@ public class MainActivityFragment extends Fragment {
         this.setRetainInstance(true);
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        if (rootView.findViewById(R.id.details_frag) != null)
+        if (rootView.findViewById(R.id.fragment) != null)
         {
             mTwoPane = true;
         } else {
             mTwoPane = false;
         }
+        System.out.println("Mtwopane: " + mTwoPane);
 
         movieList = new ArrayList<MovieData>();
         getMoviePosters(LoadPreferences());
@@ -88,10 +89,22 @@ public class MainActivityFragment extends Fragment {
                                     int position, long id) {
                 MovieData data = (MovieData) images.getItem(position);
                 SavePreferences();
-                Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra("Editing", data);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                if (mTwoPane == false) {
+                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+                            .putExtra("Editing", data);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                } else {
+                    System.out.println("Calling two Pane!");
+                    DetailActivity.DetailActivityFragment frag = new DetailActivity.DetailActivityFragment();
+                    Bundle b = new Bundle();
+                    b.putParcelable("Editing", data);
+                    frag.setArguments(b);
+
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.details_frag, frag)
+                            .commit();
+                }
             }
         });
         return gridview;
