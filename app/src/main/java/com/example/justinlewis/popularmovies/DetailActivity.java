@@ -49,12 +49,13 @@ public class DetailActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        //setContentView(R.layout.activity_detail);
 
         MovieData model = (MovieData) getIntent().getParcelableExtra("Editing");
         Bundle b = new Bundle();
         b.putParcelable("MODEL", model);
 
+        /*
         if (savedInstanceState == null) {
             DetailActivityFragment frag = new DetailActivityFragment();
             frag.setArguments(b);
@@ -62,6 +63,7 @@ public class DetailActivity extends ActionBarActivity {
                     .add(R.id.container, frag)
                     .commit();
         }
+        */
     }
 
     @Override
@@ -97,7 +99,7 @@ public class DetailActivity extends ActionBarActivity {
             System.out.println("infalting...");
             this.menuItem = item;
             int icon = android.R.drawable.star_big_on;
-            if (!model.getFavorite().equals("no")) {
+            if (model != null && !model.getFavorite().equals("no")) {
                 menu.getItem(1).setIcon(icon);
             }
         }
@@ -148,32 +150,35 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             setHasOptionsMenu(true);
-            model = (MovieData) getArguments().getParcelable("MODEL");
+            View view= inflater.inflate(R.layout.fragment_detail, container, false);
+            try {
+                model = (MovieData) getArguments().getParcelable("MODEL");
 
-            getReviewsAndTrailers();
-            View view = inflater.inflate(R.layout.fragment_detail, container, false);
-            movieTitle = (TextView) view.findViewById(R.id.movie_title);
-            moviePlot = (TextView) view.findViewById(R.id.plotSynopsisText);
-            releaseDate = (TextView) view.findViewById(R.id.movieReleaseYear);
-            voteAverage = (TextView) view.findViewById(R.id.movieVoteAverate);
-            imageView = (ImageView) view.findViewById(R.id.moviePoster);
+                getReviewsAndTrailers();
+                view = inflater.inflate(R.layout.fragment_detail, container, false);
+                movieTitle = (TextView) view.findViewById(R.id.movie_title);
+                moviePlot = (TextView) view.findViewById(R.id.plotSynopsisText);
+                releaseDate = (TextView) view.findViewById(R.id.movieReleaseYear);
+                voteAverage = (TextView) view.findViewById(R.id.movieVoteAverate);
+                imageView = (ImageView) view.findViewById(R.id.moviePoster);
 
-            voteAverage.setText("Vote average: " + model.getVote_average() + "/10");
-            releaseDate.setText(model.getRelease_date());
-            moviePlot.setText(model.getPlot_synopsis());
-            movieTitle.setText(model.getTitle());
+                voteAverage.setText("Vote average: " + model.getVote_average() + "/10");
+                releaseDate.setText(model.getRelease_date());
+                moviePlot.setText(model.getPlot_synopsis());
+                movieTitle.setText(model.getTitle());
 
-            checkDBForFavorite();
+                checkDBForFavorite();
 
-            System.out.println("Is favorite: " + model.getFavorite());
-            if (model.getFavorite().equals("yes"))
-                setStar(true);
-            else
-                setStar(false);
+                System.out.println("Is favorite: " + model.getFavorite());
+                if (model.getFavorite().equals("yes"))
+                    setStar(true);
+                else
+                    setStar(false);
 
 
-            Picasso.with(view.getContext()).load(model.getPoster_url())
-                    .into(imageView);
+                Picasso.with(view.getContext()).load(model.getPoster_url())
+                        .into(imageView);
+            } catch (Exception e) {e.printStackTrace();}
 
             return view;
         }

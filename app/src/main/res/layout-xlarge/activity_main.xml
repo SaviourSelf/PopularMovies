@@ -1,3 +1,4 @@
+<!--
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
@@ -8,7 +9,7 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <!-- "Fragment B" -->
+    "Fragment B"
     <fragment class="com.example.justinlewis.popularmovies.DetailActivity$DetailActivityFragment"
         android:id="@+id/details_frag"
         android:layout_weight="1"
@@ -16,3 +17,8 @@
         android:layout_height="match_parent" />
 
 </LinearLayout>
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
+android:layout_width="match_parent" android:layout_height="match_parent"
+tools:context=".MainActivity" tools:ignore="MergeRootFrame"/>

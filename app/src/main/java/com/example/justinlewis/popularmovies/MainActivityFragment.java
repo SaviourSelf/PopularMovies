@@ -55,6 +55,8 @@ public class MainActivityFragment extends Fragment {
 
     public static int callCount = 0;
 
+    public boolean mTwoPane;
+
     public MainActivityFragment() {
 
     }
@@ -65,9 +67,16 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.setHasOptionsMenu(true);
         this.setRetainInstance(true);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        if (rootView.findViewById(R.id.details_frag) != null)
+        {
+            mTwoPane = true;
+        } else {
+            mTwoPane = false;
+        }
 
         movieList = new ArrayList<MovieData>();
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         getMoviePosters(LoadPreferences());
         gridview = (GridView) rootView.findViewById(R.id.picture_gridview);
         images = new ImageAdapter(this.getActivity(), movieList);
