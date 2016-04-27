@@ -69,7 +69,7 @@ public class MainActivityFragment extends Fragment {
         this.setRetainInstance(true);
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        if (rootView.findViewById(R.id.fragment) != null)
+        if (rootView.findViewById(R.id.details_frag) != null)
         {
             mTwoPane = true;
         } else {
